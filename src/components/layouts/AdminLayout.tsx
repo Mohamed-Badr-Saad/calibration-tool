@@ -87,12 +87,12 @@ export default function AdminLayout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center gap-3">
               <Building2 className="h-8 w-8 text-blue-600" />
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">RASHPETCO</h1>
-                <p className="text-xs text-gray-500">Admin Panel</p>
-              </div>
+              <span className="text-lg font-bold text-gray-900">RASHPETCO</span>
+              <span className="text-xs rounded bg-blue-100 text-blue-700 px-2 ml-2">
+                Admin Portal
+              </span>
             </div>
 
             {/* User Info & Actions */}

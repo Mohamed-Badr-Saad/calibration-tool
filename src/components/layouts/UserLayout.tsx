@@ -30,7 +30,7 @@ export default function UserLayout() {
             <Building2 className="h-8 w-8 text-blue-600" />
             <span className="text-lg font-bold text-gray-900">RASHPETCO</span>
             <span className="text-xs rounded bg-blue-100 text-blue-700 px-2 ml-2">
-              User Panel
+              User Portal
             </span>
           </div>
           <div className="flex items-center gap-3">
