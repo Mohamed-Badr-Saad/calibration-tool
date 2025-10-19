@@ -670,6 +670,7 @@ export default function UserManagement() {
                                 onClick={() => deleteUser(user._id!)}
                                 className="h-8 w-8 p-0"
                                 title="Delete user"
+                                style={{ color: "red" }}
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>

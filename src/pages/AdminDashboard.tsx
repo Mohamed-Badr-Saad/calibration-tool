@@ -11,6 +11,7 @@ import {
   LogOut,
   Shield,
   Building2,
+  ChartSpline
 } from "lucide-react";
 import { toast } from "sonner";
 import UserManagement from "@/components/admin/UserManagement";
@@ -18,6 +19,7 @@ import InstrumentTable from "@/components/admin/InstrumentsTable";
 import EngineerTable from "@/components/admin/EngineersTable";
 import TechnicianTable from "@/components/admin/TechniciansTable";
 import { useAuth } from "@/CustomHooks/useAuth";
+import ToleranceTable from "@/components/admin/ToleranceTable";
 
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
@@ -30,7 +32,7 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      {/* <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
@@ -57,7 +59,7 @@ export default function AdminDashboard() {
             </div>
           </div>
         </div>
-      </header>
+      </header> */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Routes>
@@ -66,6 +68,8 @@ export default function AdminDashboard() {
           <Route path="/engineers" element={<EngineerTable />} />
           <Route path="/technicians" element={<TechnicianTable />} />
           <Route path="/users" element={<UserManagement />} />
+          <Route path="/tolerances" element={<ToleranceTable />} />
+
         </Routes>
       </div>
     </div>
@@ -105,6 +109,12 @@ function AdminHome() {
           icon={<Users className="h-6 w-6 text-purple-600" />}
           href="/admin/users"
           description="Manage user accounts"
+        />
+        <DashboardCard
+          title="Tolerance Settings"
+          icon={<ChartSpline className="h-6 w-6 text-red-800" />}
+          href="/admin/tolerances"
+          description="Manage tolerance settings"
         />
       </div>
     </div>

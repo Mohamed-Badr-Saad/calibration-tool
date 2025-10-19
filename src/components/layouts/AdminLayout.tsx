@@ -16,10 +16,12 @@ import {
   Shield,
   Building2,
   BarChart3,
+  ChartSpline,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/CustomHooks/useAuth"; // 🔥 FIXED: Correct import path
+import ToleranceTable from "../admin/ToleranceTable";
 
 export default function AdminLayout() {
   const { user, logout } = useAuth();
@@ -62,6 +64,12 @@ export default function AdminLayout() {
       label: "Users",
       icon: <Users className="h-5 w-5" />,
       description: "Manage system users",
+    },
+    {
+      path: "/admin/tolerances",
+      label: "Tolerance Settings",
+      icon: <ChartSpline className="h-5 w-5" />,
+      description: "Manage tolerance settings",
     },
   ];
 
@@ -122,14 +130,14 @@ export default function AdminLayout() {
       </header>
 
       {/* Navigation */}
-      <nav className="bg-white shadow-sm">
+      <nav className=" shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
+          <div className="flex space-x-8 mt-3 ">
             {menuItems.map((item) => (
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`px-3 py-4 text-sm font-medium transition-colors flex items-center space-x-2 border-b-2 ${
+                className={`px-3 py-4 text-sm font-medium transition-colors  flex items-center space-x-2 border-b-2 ${
                   isActive(item.path)
                     ? "text-blue-600 border-blue-600 bg-blue-50"
                     : "text-gray-600 hover:text-blue-600 border-transparent hover:border-blue-600"
@@ -216,6 +224,23 @@ export default function AdminLayout() {
                 </CardHeader>
                 <CardContent>
                   <UserManagement />
+                </CardContent>
+              </Card>
+            }
+          />
+
+          <Route
+            path="tolerances"
+            element={
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Users className="h-5 w-5" />
+                    <span>Tolerances Management</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ToleranceTable />
                 </CardContent>
               </Card>
             }
