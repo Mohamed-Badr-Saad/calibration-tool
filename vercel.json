@@ -1,4 +1,9 @@
 {
   "version": 2,
-  "buildCommand": "npm run build --no-typescript-check"
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
