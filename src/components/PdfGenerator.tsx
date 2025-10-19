@@ -554,7 +554,7 @@ const OnOffValveLayout: React.FC<{ form: CalibrationFormData }> = ({
           <Text
             style={
               isOutOfTolerance(
-                "0",
+                "100",
                 form.feedbackValueOpen,
                 tolerancesValues!.onOffValveFeedbackTolerance,
                 100
