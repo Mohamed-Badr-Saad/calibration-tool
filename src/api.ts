@@ -8,7 +8,7 @@ import type {
 
 // const API_URL = "http://localhost:5000/api"; //local api url
 
-const API_URL = "https://calibration-tool-server.vercel.app/api/"; //local api url
+const API_URL = "https://calibration-tool-server.vercel.app/api"; //local api url
 
 // 🔥 Token Management
 const getToken = (): string | null => {
