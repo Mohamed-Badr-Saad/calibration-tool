@@ -57,7 +57,7 @@ function AuthRedirect({ children }: { children: React.ReactNode }) {
     return <Navigate to={user.role === "admin" ? "/admin" : "/user"} replace />;
   }
 
-  return <Navigate to="/" replace />;
+  return <>{children}</>;
 }
 
 // Root redirect component
