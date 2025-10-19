@@ -1,4 +1,3 @@
-// src/App.tsx - COMPLETE FIXED VERSION
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "@/CustomHooks/useAuth";
 import AuthPage from "@/components/auth/AuthPage";

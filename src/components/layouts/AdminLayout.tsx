@@ -1,4 +1,3 @@
-// src/components/layouts/AdminLayout.tsx - COMPLETE FIXED VERSION
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

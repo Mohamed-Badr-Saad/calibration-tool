@@ -1,4 +1,3 @@
-// src/components/auth/AuthPage.tsx - FIXED VERSION
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"; // 🔥 ADDED: For navigation
 import { Button } from "@/components/ui/button";

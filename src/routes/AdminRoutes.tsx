@@ -1,4 +1,3 @@
-// src/components/admin/AdminRoutes.tsx
 import { Route } from "react-router-dom";
 import AdminDashboard from "@/pages/AdminDashboard";
 import InstrumentsTable from "@/components/admin/InstrumentsTable";

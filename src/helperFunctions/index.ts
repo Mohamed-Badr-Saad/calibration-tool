@@ -1,4 +1,3 @@
-// Add this helper function at the top of both TransmitterPage.tsx and GaugePage.tsx
 export function calculateAppliedValues(
   rangeFrom: string,
   rangeTo: string

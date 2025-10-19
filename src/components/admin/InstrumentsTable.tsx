@@ -1,4 +1,3 @@
-// src/components/admin/InstrumentsTable.tsx - UPDATED WITH FIXES
 
 import { useState, useEffect, useRef } from "react";
 import {

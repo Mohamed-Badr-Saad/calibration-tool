@@ -1,4 +1,3 @@
-// src/components/admin/UserManagement.tsx - COMPLETE DIRECT API VERSION
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -32,6 +31,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/CustomHooks/useAuth";
+import { API_URL } from "@/api";
 
 // 🔥 User interface
 export interface User {
@@ -54,7 +54,7 @@ export interface User {
 const UserAPI = {
   getAll: async (): Promise<User[]> => {
     const token = localStorage.getItem("authToken");
-    const response = await fetch("http://localhost:5000/api/admin/users", {
+    const response = await fetch(`${API_URL}/admin/users`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -75,7 +75,7 @@ const UserAPI = {
     role: "admin" | "user";
   }): Promise<{ message: string; user: User }> => {
     const token = localStorage.getItem("authToken");
-    const response = await fetch("http://localhost:5000/api/admin/users", {
+    const response = await fetch(`${API_URL}/admin/users`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -101,17 +101,14 @@ const UserAPI = {
     }
   ): Promise<{ message: string; user: User }> => {
     const token = localStorage.getItem("authToken");
-    const response = await fetch(
-      `http://localhost:5000/api/admin/users/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      }
-    );
+    const response = await fetch(`${API_URL}/admin/users/${id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
 
     if (!response.ok) {
       throw new Error(await response.text());
@@ -125,17 +122,14 @@ const UserAPI = {
     isActive: boolean
   ): Promise<{ message: string; user: User }> => {
     const token = localStorage.getItem("authToken");
-    const response = await fetch(
-      `http://localhost:5000/api/admin/users/${id}/status`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ isActive }),
-      }
-    );
+    const response = await fetch(`${API_URL}/admin/users/${id}/status`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isActive }),
+    });
 
     if (!response.ok) {
       throw new Error(await response.text());
@@ -146,16 +140,13 @@ const UserAPI = {
 
   remove: async (id: string): Promise<{ message: string }> => {
     const token = localStorage.getItem("authToken");
-    const response = await fetch(
-      `http://localhost:5000/api/admin/users/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${API_URL}/admin/users/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error(await response.text());
@@ -193,7 +184,6 @@ export default function UserManagement() {
 
       const data = await UserAPI.getAll();
       setUsers(data);
-
     } catch (error: any) {
       toast.error(error.message || "Failed to fetch users");
     } finally {

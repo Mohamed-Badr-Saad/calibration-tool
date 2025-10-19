@@ -1,4 +1,3 @@
-// src/context/AuthContext.tsx - FIXED VERSION
 import { createContext, useState, useEffect, type ReactNode } from "react";
 import { AuthAPI, type User, type SignupData, type AuthResponse } from "@/api";
 
