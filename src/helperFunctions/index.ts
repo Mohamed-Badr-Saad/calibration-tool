@@ -32,7 +32,39 @@ export function calculateAppliedValues(
   };
 }
 
+export function calculateAppliedValuesFlowTx(
+  rangeFrom: string,
+  rangeTo: string
+): {
+  appliedUpscale: string[];
+  appliedDownscale: string[];
+} {
+  const lrv = Number(rangeFrom);
+  const urv = Number(rangeTo);
 
+  // Handle invalid or equal values
+  if (isNaN(lrv) || isNaN(urv) || lrv === urv) {
+    return {
+      appliedUpscale: Array(5).fill(""),
+      appliedDownscale: Array(5).fill(""),
+    };
+  }
+
+  const range = urv - lrv;
+
+  const upscale = [0**2, 0.25**2, 0.5**2, 0.75**2, 1**2].map((p) =>
+    (lrv + p * range).toFixed(2)
+  );
+
+  const downscale = [1**2, 0.75**2, 0.5**2, 0.25**2, 0**2].map((p) =>
+    (lrv + p * range).toFixed(2)
+  );
+
+  return {
+    appliedUpscale: upscale,
+    appliedDownscale: downscale,
+  };
+}
 
 export const isOutOfTolerance = (
   applied: string,

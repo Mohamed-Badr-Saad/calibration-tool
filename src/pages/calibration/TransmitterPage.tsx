@@ -4,7 +4,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import type { Instrument, CalibrationFormData, Checklist } from "@/types";
-import { calculateAppliedValues, isOutOfTolerance } from "@/helperFunctions";
+import {
+  calculateAppliedValues,
+  calculateAppliedValuesFlowTx,
+  isOutOfTolerance,
+} from "@/helperFunctions";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useTolerance } from "@/CustomHooks/useTolerance";
@@ -29,10 +33,10 @@ export default function TransmitterPage({
   // Auto-recalculate applied values when range changes
   useEffect(() => {
     if (formData.rangeFrom && formData.rangeTo) {
-      const { appliedUpscale, appliedDownscale } = calculateAppliedValues(
-        formData.rangeFrom,
-        formData.rangeTo
-      );
+      const { appliedUpscale, appliedDownscale } =
+        formData.flowTx === "Square Root"
+          ? calculateAppliedValuesFlowTx(formData.rangeFrom, formData.rangeTo)
+          : calculateAppliedValues(formData.rangeFrom, formData.rangeTo);
 
       // Only update if values actually changed to avoid infinite loops
       const upscaleChanged =
@@ -53,7 +57,7 @@ export default function TransmitterPage({
         });
       }
     }
-  }, [formData.rangeFrom, formData.rangeTo]); // Watch for changes to range fields
+  }, [formData.rangeFrom, formData.rangeTo, formData.flowTx]); // Watch for changes to range fields
 
   // Helper: update field
   function handleFieldChange<K extends keyof CalibrationFormData>(
@@ -100,7 +104,7 @@ export default function TransmitterPage({
     arr[idx] = value;
     onFormChange({ ...formData, [type]: arr });
   }
-  
+
   return (
     <Card className="max-w-5xl mx-auto mt-6 p-6">
       <CardHeader>
@@ -306,23 +310,31 @@ export default function TransmitterPage({
         </div>
 
         {/* Flow TX Controls */}
-        <div>
-          <Label className="block mb-1 font-semibold">Flow TX</Label>
-          <RadioGroup
-            value={formData.flowTx}
-            onValueChange={(val) => handleFieldChange("flowTx", val)}
-            className="flex space-x-6"
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="Linear" id="flow-linear" />
-              <Label htmlFor="flow-linear">Linear</Label>
+        {formData.type === "Transmitter" &&
+          (formData.tag.toLowerCase().includes("fit") ||
+            formData.tag.toLowerCase().includes("fi") ||
+            formData.tag.toLowerCase().includes("ft") ||
+            formData.tag.toLowerCase().includes("fc")) && (
+            <div>
+              <Label className="block mb-1 font-semibold">Flow TX</Label>
+              <RadioGroup
+                value={formData.flowTx}
+                onValueChange={(val) => {
+                  handleFieldChange("flowTx", val);
+                }}
+                className="flex space-x-6"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="Linear" id="flow-linear" />
+                  <Label htmlFor="flow-linear">Linear</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="Square Root" id="flow-square-root" />
+                  <Label htmlFor="flow-square-root">Square Root</Label>
+                </div>
+              </RadioGroup>
             </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="Square Root" id="flow-square-root" />
-              <Label htmlFor="flow-square-root">Square Root</Label>
-            </div>
-          </RadioGroup>
-        </div>
+          )}
 
         {/* Controls */}
         <div className="flex items-center space-x-6">

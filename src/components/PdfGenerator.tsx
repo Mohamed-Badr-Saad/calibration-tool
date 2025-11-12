@@ -209,10 +209,15 @@ const TransmitterLayout: React.FC<{ form: CalibrationFormData }> = ({
         <Text style={styles.label}>Protocol:</Text>
         <Text style={styles.value}>{form.protocol}</Text>
       </View>
-      <View style={styles.row}>
-        <Text style={styles.label}>Flow TX:</Text>
-        <Text style={styles.value}>{form.flowTx}</Text>
-      </View>
+      {(form.tag.toLowerCase().includes("fit") ||
+        form.tag.toLowerCase().includes("fi") ||
+        form.tag.toLowerCase().includes("ft") ||
+        form.tag.toLowerCase().includes("fc")) && (
+        <View style={styles.row}>
+          <Text style={styles.label}>Flow TX:</Text>
+          <Text style={styles.value}>{form.flowTx}</Text>
+        </View>
+      )}
     </View>
 
     {/* Test Results Table */}
