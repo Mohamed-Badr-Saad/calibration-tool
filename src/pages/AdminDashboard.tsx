@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,7 @@ import {
   LogOut,
   Shield,
   Building2,
-  ChartSpline
+  ChartSpline,
 } from "lucide-react";
 import { toast } from "sonner";
 import UserManagement from "@/components/admin/UserManagement";
@@ -69,7 +69,6 @@ export default function AdminDashboard() {
           <Route path="/technicians" element={<TechnicianTable />} />
           <Route path="/users" element={<UserManagement />} />
           <Route path="/tolerances" element={<ToleranceTable />} />
-
         </Routes>
       </div>
     </div>
@@ -132,6 +131,8 @@ function DashboardCard({
   href: string;
   description: string;
 }) {
+  const navigate = useNavigate();
+
   return (
     <Card className="hover:shadow-lg transition-shadow cursor-pointer">
       <CardHeader className="pb-3">
@@ -145,7 +146,9 @@ function DashboardCard({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => (window.location.href = href)}
+          onClick={() => {
+            navigate(href);
+          }}
           className="w-full"
         >
           Manage
