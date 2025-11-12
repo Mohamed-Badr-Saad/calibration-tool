@@ -5,10 +5,12 @@ import {
   View,
   StyleSheet,
   PDFDownloadLink,
+  Image,
 } from "@react-pdf/renderer";
 import React from "react";
 import type { CalibrationFormData, tolerancesType } from "@/types";
 import { isOutOfTolerance, isValveTimeOutOfTolerance } from "@/helperFunctions";
+import { Button } from "./ui/button";
 
 let tolerancesValues: tolerancesType = {};
 
@@ -20,7 +22,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 16,
-    marginBottom: 20,
+    // marginBottom: 20,
     textAlign: "center",
     fontWeight: "bold",
   },
@@ -761,9 +763,31 @@ export const PdfGenerator: React.FC<PdfGeneratorProps> = ({ forms }) => (
   <Document>
     {forms.map((form, idx) => (
       <Page key={idx} style={styles.page} wrap>
-        <Text style={styles.header}>
-          {form.type} Calibration Sheet - {form.tag}
-        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
+            <Text style={styles.header}>
+              {form.type} Calibration Sheet - {form.tag}
+            </Text>
+          </View>
+          <Image
+            src="./Rashid-Logo.jpg"
+            style={{ width: 60, height: 60, marginLeft: "auto" }}
+          />
+        </View>
 
         {/* Render instrument-specific layout */}
         {renderInstrumentLayout(form)}
@@ -820,9 +844,11 @@ export const PdfGenerator: React.FC<PdfGeneratorProps> = ({ forms }) => (
 export function PdfDownloadButton({
   forms,
   tolerances,
+  onAfterDownload,
 }: {
   forms: CalibrationFormData[];
   tolerances: tolerancesType | null;
+  onAfterDownload: () => void;
 }) {
   tolerancesValues = tolerances || {
     transmitterTolerance: 0,
@@ -834,15 +860,63 @@ export function PdfDownloadButton({
     unit: "%",
   };
 
+  const [hasDownloaded, setHasDownloaded] = React.useState(false);
   return (
-    <PDFDownloadLink
-      document={<PdfGenerator forms={forms} />}
-      fileName="calibration_sheets.pdf"
-      className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
-    >
-      {({ loading }) =>
-        loading ? "Preparing PDF..." : "Export All Calibration Sheets"
-      }
-    </PDFDownloadLink>
+    <>
+      <PDFDownloadLink
+        document={<PdfGenerator forms={forms} />}
+        fileName="calibration_sheets.pdf"
+        className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+      >
+        {({ loading }) =>
+          loading
+            ? "Preparing PDF..."
+            : !hasDownloaded && (
+                <Button
+                  onClick={() => setHasDownloaded(true)}
+                  style={{
+                    backgroundColor: "#16a34a", // Tailwind green-600
+                    color: "#fff",
+                    fontWeight: 600,
+                    padding: "0.5rem 1rem",
+                    borderRadius: "0.375rem",
+                    boxShadow: "0 1px 2px rgb(0 0 0 / 0.05)",
+                    cursor: "pointer",
+                    transition: "background-color 0.15s ease-in-out",
+                    border: "none",
+                    marginLeft: "1rem",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.backgroundColor = "#15803d")
+                  } // hover green-700
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.backgroundColor = "#16a34a")
+                  }
+                >
+                  Export All Calibration Sheets
+                </Button>
+              )
+        }
+      </PDFDownloadLink>
+      {hasDownloaded && (
+        <Button
+          style={{
+            marginTop: "1rem",
+            backgroundColor: "#28a745",
+            color: "#fff",
+            fontWeight: "600",
+            padding: "0.5rem 1rem",
+            borderRadius: "0.375rem",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            setHasDownloaded(false);
+            onAfterDownload();
+          }}
+        >
+          Click Here To Modify The Sheets
+        </Button>
+      )}
+    </>
   );
 }

@@ -36,8 +36,18 @@ const initialChecklist: Checklist = {
 };
 
 export default function CalibrationPage() {
+  const [exportData, setExportData] = useState<CalibrationFormData[] | null>(
+    null
+  );
+  const [startExport, setStartExport] = useState(false);
+
+  const handleExport = () => {
+    setExportData(structuredClone(allFormsCompleted));
+    setStartExport(true);
+  };
+
   const { user } = useAuth();
-const { tolerances } = useTolerance();
+  const { tolerances } = useTolerance();
   function createDefaultFormData(instrument: Instrument): CalibrationFormData {
     const lrv = Number(instrument.LRV);
     const urv = Number(instrument.URV);
@@ -148,7 +158,7 @@ const { tolerances } = useTolerance();
       setFormResults(initialForms);
     }
   }, [instruments, instrumentIds]);
-  
+
   useEffect(() => {
     if (!tech) return;
     setFormResults((prev) => {
@@ -168,7 +178,9 @@ const { tolerances } = useTolerance();
     return (
       <div className="p-4 text-center">
         <p>No instruments selected or invalid selection.</p>
-        <Button onClick={() => navigate("/user/dashboard")}>Back to Dashboard</Button>
+        <Button onClick={() => navigate("/user/dashboard")}>
+          Back to Dashboard
+        </Button>
       </div>
     );
   }
@@ -328,8 +340,45 @@ const { tolerances } = useTolerance();
           </Button>
         </div>
 
-        <div className="flex justify-center mt-8">
-          <PdfDownloadButton forms={allFormsCompleted} tolerances={tolerances} />
+        <div className="flex flex-col justify-center items-center mt-8 ">
+          <div>
+            {!exportData && (
+              <Button
+                onClick={handleExport}
+                style={{
+                  backgroundColor: "#2563eb", // Tailwind blue-600
+                  color: "#fff",
+                  fontWeight: 600,
+                  padding: "0.5rem 1rem",
+                  borderRadius: "0.375rem",
+                  boxShadow: "0 1px 2px rgb(0 0 0 / 0.05)",
+                  cursor: "pointer",
+                  transition: "background-color 0.15s ease-in-out",
+                  border: "none",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#1d4ed8")
+                } // hover blue-700
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#2563eb")
+                }
+              >
+                Prepare All Calibration Sheets
+              </Button>
+            )}
+          </div>
+          <div>
+            {startExport && exportData && (
+              <PdfDownloadButton
+                forms={exportData}
+                tolerances={tolerances}
+                onAfterDownload={() => {
+                  setStartExport(false);
+                  setExportData(null);
+                }}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
