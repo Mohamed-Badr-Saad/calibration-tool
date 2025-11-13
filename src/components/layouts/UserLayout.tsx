@@ -1,12 +1,7 @@
-import {
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, User, Building2 } from "lucide-react";
+import { LogOut, User, Building2, Image } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/CustomHooks/useAuth";
 import UserDashboard from "@/pages/UserDashboard";
@@ -27,7 +22,10 @@ export default function UserLayout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Logo and title */}
           <div className="flex items-center gap-3">
-            <Building2 className="h-8 w-8 text-blue-600" />
+            {/* <Building2 className="h-8 w-8 text-blue-600" /> */}
+            <div>
+              <img src={"/Rashid-icon.ico"} alt="Rashid Logo" className="w-[50px]" />
+            </div>
             <span className="text-lg font-bold text-gray-900">RASHPETCO</span>
             <span className="text-xs rounded bg-blue-100 text-blue-700 px-2 ml-2">
               User Portal

@@ -88,7 +88,14 @@ export default function AdminLayout() {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <Building2 className="h-8 w-8 text-blue-600" />
+              {/* <Building2 className="h-8 w-8 text-blue-600" /> */}
+              <div>
+                <img
+                  src={"/Rashid-icon.ico"}
+                  alt="Rashid Logo"
+                  className="w-[50px]"
+                />
+              </div>
               <span className="text-lg font-bold text-gray-900">RASHPETCO</span>
               <span className="text-xs rounded bg-blue-100 text-blue-700 px-2 ml-2">
                 Admin Portal

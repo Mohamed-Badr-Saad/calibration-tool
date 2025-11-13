@@ -305,12 +305,22 @@ export default function CalibrationPage() {
                 setTech(val as string);
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger
+                style={{
+                  // backgroundColor: "#fffbe8",
+                  border: "1px solid blue",
+                  boxShadow: "0 1px 3px rgba(0,0,2,1)",
+                }}
+                className="bg-gray-200 !border-[#d1d5db] !text-gray-900 "
+              >
                 <SelectValue placeholder="Created By" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent
+                className="max-h-48 overflow-y-auto bg-gray-100"
+                // style={{ backgroundColor: "#fffbe8" }}
+              >
                 {technicians.map((tech) => (
-                  <SelectItem key={tech._id} value={tech.name}>
+                  <SelectItem key={tech._id} value={tech.name} className="border-b border-gray-200 hover:bg-gray-300">
                     {tech.name}
                   </SelectItem>
                 ))}
