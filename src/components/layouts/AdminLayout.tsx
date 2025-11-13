@@ -17,11 +17,13 @@ import {
   Building2,
   BarChart3,
   ChartSpline,
+  FileSpreadsheet,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/CustomHooks/useAuth"; // 🔥 FIXED: Correct import path
 import ToleranceTable from "../admin/ToleranceTable";
+import UserDashboard from "@/pages/UserDashboard";
 
 export default function AdminLayout() {
   const { user, logout } = useAuth();
@@ -40,6 +42,12 @@ export default function AdminLayout() {
       label: "Dashboard",
       icon: <BarChart3 className="h-5 w-5" />,
       description: "Overview and statistics",
+    },
+    {
+      path: "/admin/user/dashboard",
+      label: "Calibration sheet management",
+      icon: <FileSpreadsheet className="h-5 w-5" />,
+      description: "Manage Calibration sheets",
     },
     {
       path: "/admin/instruments",
@@ -168,6 +176,22 @@ export default function AdminLayout() {
           <Route path="dashboard" element={<AdminDashboard />} />
 
           {/* Individual Tables */}
+          <Route
+            path="user/dashboard"
+            element={
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Settings className="h-5 w-5" />
+                    <span>Calibration Sheet Management</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <UserDashboard />
+                </CardContent>
+              </Card>
+            }
+          />
           <Route
             path="instruments"
             element={

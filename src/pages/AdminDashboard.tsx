@@ -1,7 +1,6 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
 import {
   Settings,
@@ -9,6 +8,7 @@ import {
   Wrench,
   UserCog,
   ChartSpline,
+  FileSpreadsheet,
 } from "lucide-react";
 import { toast } from "sonner";
 import UserManagement from "@/components/admin/UserManagement";
@@ -17,6 +17,7 @@ import EngineerTable from "@/components/admin/EngineersTable";
 import TechnicianTable from "@/components/admin/TechniciansTable";
 import { useAuth } from "@/CustomHooks/useAuth";
 import ToleranceTable from "@/components/admin/ToleranceTable";
+import UserDashboard from "./UserDashboard";
 
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
@@ -66,6 +67,7 @@ export default function AdminDashboard() {
           <Route path="/technicians" element={<TechnicianTable />} />
           <Route path="/users" element={<UserManagement />} />
           <Route path="/tolerances" element={<ToleranceTable />} />
+          <Route path="/user/dashboard" element={<UserDashboard />} />
         </Routes>
       </div>
     </div>
@@ -82,6 +84,12 @@ function AdminHome() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <DashboardCard
+          title="Calibration Sheets"
+          icon={<FileSpreadsheet className="h-6 w-6 text-green-800" />}
+          href="/admin/user/dashboard"
+          description="Calibration sheet management"
+        />
         <DashboardCard
           title="Instruments"
           icon={<Settings className="h-6 w-6 text-blue-600" />}
