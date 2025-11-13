@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -76,6 +76,10 @@ export default function UserManagement() {
     jobTitle: "engineer" as "engineer" | "technician",
   });
 
+  useEffect(() => {
+    if (users.length === 0) refresh();
+  }, []);
+
   // Save user (create or update)
   const handleSave = async () => {
     try {
@@ -86,6 +90,7 @@ export default function UserManagement() {
         !newUser.role ||
         !newUser.jobTitle
       ) {
+        console.log(newUser.jobTitle);
         toast.error("Please fill in all required fields");
         return;
       }
@@ -311,7 +316,7 @@ export default function UserManagement() {
                       <Label htmlFor="user-job-title">Job Title *</Label>
                       <Select
                         value={newUser.jobTitle}
-                        onValueChange={(value: "technician" | "engineer") => {
+                        onValueChange={(value: "engineer" | "technician") => {
                           setNewUser({ ...newUser, jobTitle: value });
                         }}
                         required
