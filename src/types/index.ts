@@ -111,6 +111,7 @@ export interface User {
   isActive: boolean;
   createdAt?: string;
   lastLogin?: string;
+  jobTitle?: string;
 }
 
 export interface SignupData {

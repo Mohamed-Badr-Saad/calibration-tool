@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,12 +28,14 @@ import {
   UserCheck,
   UserX,
   RefreshCw,
+  UserCog,
+  Wrench,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/CustomHooks/useAuth";
-import { API_URL } from "@/api";
+import { useUsers } from "@/CustomHooks/useUsers"; // <-- Your custom hook
 
-// 🔥 User interface
+// User interface
 export interface User {
   _id?: string;
   email: string;
@@ -51,118 +53,18 @@ export interface User {
   jobTitle: "engineer" | "technician";
 }
 
-// 🔥 Direct API functions (no need for separate file)
-const UserAPI = {
-  getAll: async (): Promise<User[]> => {
-    const token = localStorage.getItem("authToken");
-    const response = await fetch(`${API_URL}/admin/users`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-
-    return response.json();
-  },
-
-  create: async (userData: {
-    email: string;
-    name: string;
-    password: string;
-    role: "admin" | "user";
-    jobTitle: "technician" | "engineer";
-  }): Promise<{ message: string; user: User }> => {
-    const token = localStorage.getItem("authToken");
-    const response = await fetch(`${API_URL}/admin/users`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-
-    return response.json();
-  },
-
-  update: async (
-    id: string,
-    userData: {
-      email: string;
-      name: string;
-      password?: string;
-      role: "admin" | "user";
-      jobTitle: "technician" | "engineer";
-    }
-  ): Promise<{ message: string; user: User }> => {
-    const token = localStorage.getItem("authToken");
-    const response = await fetch(`${API_URL}/admin/users/${id}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-
-    return response.json();
-  },
-
-  toggleStatus: async (
-    id: string,
-    isActive: boolean
-  ): Promise<{ message: string; user: User }> => {
-    const token = localStorage.getItem("authToken");
-    const response = await fetch(`${API_URL}/admin/users/${id}/status`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ isActive }),
-    });
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-
-    return response.json();
-  },
-
-  remove: async (id: string): Promise<{ message: string }> => {
-    const token = localStorage.getItem("authToken");
-    const response = await fetch(`${API_URL}/admin/users/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-
-    return response.json();
-  },
-};
-
 export default function UserManagement() {
   const { user: currentUser } = useAuth();
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(false);
+  const {
+    users,
+    loading,
+    refresh,
+    createUser,
+    updateUser,
+    removeUser,
+    toggleStatus,
+  } = useUsers();
+
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<User | null>(null);
@@ -171,35 +73,12 @@ export default function UserManagement() {
     name: "",
     password: "",
     role: "user" as "admin" | "user",
-    jobTitle: "engineer" as "engineer" | "technician", // <-- Default value, adjust as needed
+    jobTitle: "engineer" as "engineer" | "technician",
   });
 
-  // 🔥 Fetch users on component mount
-  useEffect(() => {
-    if (currentUser?.role === "admin") {
-      fetchUsers();
-    }
-  }, [currentUser]);
-
-  // 🔥 Fetch users function
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-
-      const data = await UserAPI.getAll();
-      setUsers(data);
-    } catch (error: any) {
-      toast.error(error.message || "Failed to fetch users");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 🔥 Save user (create or update)
+  // Save user (create or update)
   const handleSave = async () => {
     try {
-      console.log("💾 Saving user:", editing ? "Update" : "Create", newUser);
-console.log(newUser.jobTitle);
       // Validation
       if (
         !newUser.email ||
@@ -210,17 +89,14 @@ console.log(newUser.jobTitle);
         toast.error("Please fill in all required fields");
         return;
       }
-
       if (!editing && !newUser.password) {
         toast.error("Password is required for new users");
         return;
       }
-
       if (newUser.password && newUser.password.length < 6) {
         toast.error("Password must be at least 6 characters long");
         return;
       }
-
       // Email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(newUser.email)) {
@@ -230,29 +106,14 @@ console.log(newUser.jobTitle);
 
       let result;
       if (editing) {
-        // Update user
         const updateData = { ...newUser };
-        if (!updateData.password) delete updateData.password; // Don't send empty password
-        result = await UserAPI.update(editing._id!, updateData);
-
-        // Update local state
-        setUsers((prev) =>
-          prev.map((user) => (user._id === editing._id ? result.user : user))
-        );
-
+        if (!updateData.password) delete updateData.password;
+        result = await updateUser(editing._id!, updateData);
         toast.success("User updated successfully");
       } else {
-        // Create user
-        result = await UserAPI.create(newUser);
-
-        // Add to local state
-        setUsers((prev) => [result.user, ...prev]);
-
+        result = await createUser(newUser);
         toast.success("User created successfully");
       }
-
-      console.log("✅ User saved:", result);
-
       // Reset form
       setOpen(false);
       setEditing(null);
@@ -264,64 +125,41 @@ console.log(newUser.jobTitle);
         jobTitle: "engineer",
       });
     } catch (error: any) {
-      console.error("❌ Save user error:", error);
       toast.error(error.message || "Operation failed");
     }
   };
 
-  // 🔥 Toggle user status
-  const toggleUserStatus = async (userId: string, isActive: boolean) => {
+  // Toggle user status
+  const handleToggle = async (userId: string, isActive: boolean) => {
     try {
-      console.log("🔄 Toggling user status:", userId, !isActive);
-
-      const result = await UserAPI.toggleStatus(userId, !isActive);
-
-      // Update local state
-      setUsers((prev) =>
-        prev.map((user) =>
-          user._id === userId ? { ...user, isActive: !isActive } : user
-        )
-      );
-
+      await toggleStatus(userId, !isActive);
       toast.success(
         `User ${!isActive ? "activated" : "deactivated"} successfully`
       );
-      console.log("✅ Status toggled:", result);
     } catch (error: any) {
-      console.error("❌ Toggle status error:", error);
       toast.error(error.message || "Failed to update user status");
     }
   };
 
-  // 🔥 Delete user
-  const deleteUser = async (userId: string) => {
+  // Delete user
+  const handleDelete = async (userId: string) => {
     if (
       window.confirm(
         "Are you sure you want to delete this user? This action cannot be undone."
       )
     ) {
       try {
-        console.log("🗑️ Deleting user:", userId);
-
-        await UserAPI.remove(userId);
-
-        // Remove from local state
-        setUsers((prev) => prev.filter((user) => user._id !== userId));
-
+        await removeUser(userId);
         toast.success("User deleted successfully");
-        console.log("✅ User deleted");
       } catch (error: any) {
-        console.error("❌ Delete user error:", error);
         toast.error(error.message || "Failed to delete user");
       }
     }
   };
 
-  // 🔥 Handle edit
+  // Handle edit
   const handleEdit = (user: User) => {
-    console.log("✏️ Editing user:", user);
     setEditing(user);
-    console.log(user.jobTitle);
     setNewUser({
       email: user.email,
       name: user.name,
@@ -332,7 +170,7 @@ console.log(newUser.jobTitle);
     setOpen(true);
   };
 
-  // 🔥 Filter users
+  // Filter users
   const filtered = users.filter(
     (u) =>
       u.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -340,7 +178,7 @@ console.log(newUser.jobTitle);
       u.role.toLowerCase().includes(search.toLowerCase())
   );
 
-  // 🔥 Statistics
+  // Statistics
   const stats = {
     total: users.length,
     active: users.filter((u) => u.isActive).length,
@@ -348,7 +186,7 @@ console.log(newUser.jobTitle);
     users: users.filter((u) => u.role === "user").length,
   };
 
-  // 🔥 Access control
+  // Access control
   if (currentUser?.role !== "admin") {
     return (
       <Card>
@@ -385,7 +223,6 @@ console.log(newUser.jobTitle);
                 </p>
               </div>
             </div>
-
             {/* Stats */}
             <div className="flex items-center space-x-4">
               <div className="text-center">
@@ -420,11 +257,10 @@ console.log(newUser.jobTitle);
                 className="pl-10"
               />
             </div>
-
             <div className="flex gap-2">
               <Button
                 variant="outline"
-                onClick={fetchUsers}
+                onClick={refresh}
                 disabled={loading}
                 className="flex items-center gap-2"
               >
@@ -433,12 +269,10 @@ console.log(newUser.jobTitle);
                 />
                 Refresh
               </Button>
-
               <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                   <Button
                     onClick={() => {
-                      console.log("➕ Adding new user");
                       setEditing(null);
                       setNewUser({
                         email: "",
@@ -454,7 +288,6 @@ console.log(newUser.jobTitle);
                     Add User
                   </Button>
                 </DialogTrigger>
-
                 <DialogContent className="sm:max-w-md bg-amber-50">
                   <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
@@ -462,7 +295,6 @@ console.log(newUser.jobTitle);
                       {editing ? "Edit User" : "Add New User"}
                     </DialogTitle>
                   </DialogHeader>
-
                   <div className="space-y-4 py-4">
                     <div className="space-y-2">
                       <Label htmlFor="user-name">Full Name *</Label>
@@ -475,7 +307,6 @@ console.log(newUser.jobTitle);
                         }
                       />
                     </div>
-
                     <div className="space-y-2">
                       <Label htmlFor="user-job-title">Job Title *</Label>
                       <Select
@@ -495,14 +326,12 @@ console.log(newUser.jobTitle);
                         >
                           <SelectValue placeholder="Select job title" />
                         </SelectTrigger>
-
                         <SelectContent style={{ backgroundColor: "#fffbe8" }}>
                           <SelectItem value="engineer">Engineer</SelectItem>
                           <SelectItem value="technician">Technician</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
-
                     <div className="space-y-2">
                       <Label htmlFor="user-email">Email Address *</Label>
                       <Input
@@ -515,7 +344,6 @@ console.log(newUser.jobTitle);
                         }
                       />
                     </div>
-
                     <div className="space-y-2">
                       <Label htmlFor="user-password">
                         {editing
@@ -532,7 +360,6 @@ console.log(newUser.jobTitle);
                         }
                       />
                     </div>
-
                     <div className="space-y-2">
                       <Label htmlFor="user-role">Role *</Label>
                       <Select
@@ -571,7 +398,6 @@ console.log(newUser.jobTitle);
                         </SelectContent>
                       </Select>
                     </div>
-
                     <div className="flex justify-end gap-3 pt-4 border-t">
                       <Button variant="outline" onClick={() => setOpen(false)}>
                         Cancel
@@ -587,7 +413,6 @@ console.log(newUser.jobTitle);
           </div>
         </CardContent>
       </Card>
-
       {/* Users Table */}
       <Card>
         <CardContent className="p-0">
@@ -661,6 +486,12 @@ console.log(newUser.jobTitle);
                               : "bg-pink-100 text-pink-800"
                           }
                         >
+                          {user.jobTitle === "engineer" ? (
+                            <UserCog className="h-5 w-5" />
+                          ) : (
+                            <Wrench className="h-5 w-5" />
+                          )}
+
                           {user.jobTitle}
                         </Badge>
                       </td>
@@ -716,7 +547,7 @@ console.log(newUser.jobTitle);
                                 size="sm"
                                 variant="outline"
                                 onClick={() =>
-                                  toggleUserStatus(user._id!, user.isActive)
+                                  handleToggle(user._id!, user.isActive)
                                 }
                                 className="h-8 w-8 p-0"
                                 title={
@@ -734,7 +565,7 @@ console.log(newUser.jobTitle);
                               <Button
                                 size="sm"
                                 variant="destructive"
-                                onClick={() => deleteUser(user._id!)}
+                                onClick={() => handleDelete(user._id!)}
                                 className="h-8 w-8 p-0"
                                 title="Delete user"
                                 style={{ color: "red" }}
