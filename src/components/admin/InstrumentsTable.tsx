@@ -1,5 +1,4 @@
-
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -131,6 +130,29 @@ export default function InstrumentTable() {
     removeInstrument,
     refresh,
   } = useInstrumentsContext();
+
+  /****to make autocomplete suggestions for upper equipment in the form of creating/editing an instrument */
+  const upperEquipments = useMemo(() => {
+    // filter(Boolean): removes null/undefined/empty
+    return Array.from(
+      new Set(
+        instruments
+          .map((ins) => ins["Upper Equipment"])
+          .filter((name) => !!name && typeof name === "string")
+      )
+    );
+  }, [instruments]);
+
+  const [upperEquipment, setUpperEquipment] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const filteredSuggestions = upperEquipments.filter(
+    (eq) =>
+      eq.toLowerCase().includes(upperEquipment.toLowerCase()) &&
+      upperEquipment.trim() !== ""
+  );
+
+  /*********************************************************** */
 
   const [currentFilters, setCurrentFilters] = useState<SearchFilters>({
     tag: "",
@@ -522,13 +544,14 @@ export default function InstrumentTable() {
                         setEditing(null);
                         resetForm();
                       }}
-                      className="flex items-center gap-2"
+                      variant={"outline"}
+                      className="text-red-400 flex items-center gap-2  hover:cursor-pointer hover:text-red-600 "
                     >
                       <Plus className="h-4 w-4" />
                       Add Instrument
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gray-200 ">
+                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-amber-50 ">
                     <DialogHeader>
                       <DialogTitle className="text-xl">
                         {editing ? "Edit Instrument" : "Add New Instrument"}
@@ -560,10 +583,20 @@ export default function InstrumentTable() {
                               value={calibrationForm}
                               onValueChange={handleCalibrationFormChange}
                             >
-                              <SelectTrigger id="calibration-form">
+                              <SelectTrigger
+                                style={{
+                                  backgroundColor: "#fffbe8",
+                                  border: "1px solid blue",
+                                  boxShadow: "0 1px 3px rgba(0,0,2,1)",
+                                }}
+                                className="!bg-[#fffbe8] !border-[#d1d5db] !text-gray-900"
+                                id="calibration-form"
+                              >
                                 <SelectValue placeholder="Select calibration sheet form" />
                               </SelectTrigger>
-                              <SelectContent>
+                              <SelectContent
+                                style={{ backgroundColor: "#fffbe8" }}
+                              >
                                 {CALIBRATION_FORMS.map((formType) => (
                                   <SelectItem key={formType} value={formType}>
                                     {formType}
@@ -591,20 +624,60 @@ export default function InstrumentTable() {
                               >
                                 Upper Equipment
                               </Label>
-                              <Input
-                                id="upper-equipment"
-                                placeholder={
-                                  disabledFields.includes("Upper Equipment")
-                                    ? "N/A (disabled)"
-                                    : "Enter upper equipment"
-                                }
-                                ref={(el) => {
-                                  formRefs.current["Upper Equipment"] = el;
-                                }}
-                                disabled={disabledFields.includes(
-                                  "Upper Equipment"
-                                )}
-                              />
+                              <div className="relative">
+                                <Input
+                                  id="upper-equipment"
+                                  value={upperEquipment}
+                                  onChange={(e) => {
+                                    setUpperEquipment(
+                                      e.target.value.toUpperCase()
+                                    );
+                                    setShowSuggestions(true);
+                                  }}
+                                  onFocus={() => setShowSuggestions(true)}
+                                  onBlur={() =>
+                                    setTimeout(
+                                      () => setShowSuggestions(false),
+                                      100
+                                    )
+                                  }
+                                  placeholder={
+                                    disabledFields.includes("Upper Equipment")
+                                      ? "N/A (disabled)"
+                                      : "Enter upper equipment"
+                                  }
+                                  ref={(el) => {
+                                    formRefs.current["Upper Equipment"] = el;
+                                  }}
+                                  disabled={disabledFields.includes(
+                                    "Upper Equipment"
+                                  )}
+                                />
+                                {showSuggestions &&
+                                  filteredSuggestions.length > 0 && (
+                                    <ul
+                                      style={{
+                                        backgroundColor: "#fffbe8",
+                                        maxHeight: "12rem", // Example: 12rem = 192px, adjust as needed
+                                        overflowY: "auto",
+                                      }}
+                                      className="absolute z-10 w-full border border-gray-300 rounded shadow"
+                                    >
+                                      {filteredSuggestions.map((suggestion) => (
+                                        <li
+                                          key={suggestion}
+                                          className="cursor-pointer hover:bg-blue-50 px-4 py-2"
+                                          onMouseDown={() => {
+                                            setUpperEquipment(suggestion);
+                                            setShowSuggestions(false);
+                                          }}
+                                        >
+                                          {suggestion}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
+                              </div>
                             </div>
 
                             <div className="space-y-2">

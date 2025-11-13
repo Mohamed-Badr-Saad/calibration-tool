@@ -114,7 +114,7 @@ export default function TechnicianTable() {
                   Add Technician
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-md bg-gray-200">
+                <DialogContent className="sm:max-w-md bg-amber-50">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2 text-xl">
                     <Wrench className="h-5 w-5 text-green-600" />

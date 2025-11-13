@@ -277,6 +277,7 @@ export default function UserManagement() {
               <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                   <Button
+                    variant={"outline"}
                     onClick={() => {
                       setEditing(null);
                       setNewUser({
@@ -287,7 +288,7 @@ export default function UserManagement() {
                         jobTitle: "engineer",
                       });
                     }}
-                    className="flex items-center gap-2"
+                    className="text-red-400 flex items-center gap-2  hover:cursor-pointer hover:text-red-600 "
                   >
                     <Plus className="h-4 w-4" />
                     Add User
