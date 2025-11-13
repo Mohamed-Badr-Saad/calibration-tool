@@ -8,9 +8,6 @@ import {
   Users,
   Wrench,
   UserCog,
-  LogOut,
-  Shield,
-  Building2,
   ChartSpline,
 } from "lucide-react";
 import { toast } from "sonner";
