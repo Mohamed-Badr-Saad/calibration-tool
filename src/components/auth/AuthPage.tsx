@@ -240,11 +240,11 @@ export default function AuthPage() {
             </div>
 
             {/* Super Admin Info */}
-            {isLogin && (
+            {/* {isLogin && (
               <div className="mt-4 text-xs text-center text-gray-500">
                 💡 Super Admin: Mohamed.Ali@RASHPETCO.com
               </div>
-            )}
+            )} */}
           </CardContent>
         </Card>
 
