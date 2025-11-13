@@ -48,6 +48,7 @@ export interface User {
     name: string;
     email: string;
   };
+  jobTitle: "engineer" | "technician";
 }
 
 // 🔥 Direct API functions (no need for separate file)
@@ -73,6 +74,7 @@ const UserAPI = {
     name: string;
     password: string;
     role: "admin" | "user";
+    jobTitle: "technician" | "engineer";
   }): Promise<{ message: string; user: User }> => {
     const token = localStorage.getItem("authToken");
     const response = await fetch(`${API_URL}/admin/users`, {
@@ -98,6 +100,7 @@ const UserAPI = {
       name: string;
       password?: string;
       role: "admin" | "user";
+      jobTitle: "technician" | "engineer";
     }
   ): Promise<{ message: string; user: User }> => {
     const token = localStorage.getItem("authToken");
@@ -168,6 +171,7 @@ export default function UserManagement() {
     name: "",
     password: "",
     role: "user" as "admin" | "user",
+    jobTitle: "engineer" as "engineer" | "technician", // <-- Default value, adjust as needed
   });
 
   // 🔥 Fetch users on component mount
@@ -195,9 +199,14 @@ export default function UserManagement() {
   const handleSave = async () => {
     try {
       console.log("💾 Saving user:", editing ? "Update" : "Create", newUser);
-
+console.log(newUser.jobTitle);
       // Validation
-      if (!newUser.email || !newUser.name || !newUser.role) {
+      if (
+        !newUser.email ||
+        !newUser.name ||
+        !newUser.role ||
+        !newUser.jobTitle
+      ) {
         toast.error("Please fill in all required fields");
         return;
       }
@@ -247,7 +256,13 @@ export default function UserManagement() {
       // Reset form
       setOpen(false);
       setEditing(null);
-      setNewUser({ email: "", name: "", password: "", role: "user" });
+      setNewUser({
+        email: "",
+        name: "",
+        password: "",
+        role: "user",
+        jobTitle: "engineer",
+      });
     } catch (error: any) {
       console.error("❌ Save user error:", error);
       toast.error(error.message || "Operation failed");
@@ -306,11 +321,13 @@ export default function UserManagement() {
   const handleEdit = (user: User) => {
     console.log("✏️ Editing user:", user);
     setEditing(user);
+    console.log(user.jobTitle);
     setNewUser({
       email: user.email,
       name: user.name,
       password: "",
       role: user.role,
+      jobTitle: user.jobTitle,
     });
     setOpen(true);
   };
@@ -428,6 +445,7 @@ export default function UserManagement() {
                         name: "",
                         password: "",
                         role: "user",
+                        jobTitle: "engineer",
                       });
                     }}
                     className="flex items-center gap-2"
@@ -456,6 +474,33 @@ export default function UserManagement() {
                           setNewUser({ ...newUser, name: e.target.value })
                         }
                       />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="user-job-title">Job Title *</Label>
+                      <Select
+                        value={newUser.jobTitle}
+                        onValueChange={(value: "technician" | "engineer") => {
+                          setNewUser({ ...newUser, jobTitle: value });
+                        }}
+                        required
+                      >
+                        <SelectTrigger
+                          style={{
+                            backgroundColor: "#fffbe8",
+                            border: "1px solid blue",
+                            boxShadow: "0 1px 3px rgba(0,0,2,1)",
+                          }}
+                          className="!bg-[#fffbe8] !border-[#d1d5db] !text-gray-900"
+                        >
+                          <SelectValue placeholder="Select job title" />
+                        </SelectTrigger>
+
+                        <SelectContent style={{ backgroundColor: "#fffbe8" }}>
+                          <SelectItem value="engineer">Engineer</SelectItem>
+                          <SelectItem value="technician">Technician</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
 
                     <div className="space-y-2">
@@ -496,10 +541,17 @@ export default function UserManagement() {
                           setNewUser({ ...newUser, role: value })
                         }
                       >
-                        <SelectTrigger>
+                        <SelectTrigger
+                          style={{
+                            backgroundColor: "#fffbe8",
+                            border: "1px solid blue",
+                            boxShadow: "0 1px 3px rgba(0,0,2,1)",
+                          }}
+                          className="!bg-[#fffbe8] !border-[#d1d5db] !text-gray-900"
+                        >
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent style={{ backgroundColor: "#fffbe8" }}>
                           <SelectItem value="user">
                             <span className="flex items-center gap-2">
                               👤 User{" "}
@@ -553,6 +605,9 @@ export default function UserManagement() {
                       User
                     </th>
                     <th className="text-left p-4 font-medium text-gray-700">
+                      Job Title
+                    </th>
+                    <th className="text-left p-4 font-medium text-gray-700">
                       Role
                     </th>
                     <th className="text-left p-4 font-medium text-gray-700">
@@ -596,6 +651,18 @@ export default function UserManagement() {
                             </div>
                           </div>
                         </div>
+                      </td>
+                      <td className="p-4 capitalize">
+                        <Badge
+                          variant="secondary"
+                          className={
+                            user.jobTitle === "engineer"
+                              ? "bg-orange-100 text-orange-800"
+                              : "bg-pink-100 text-pink-800"
+                          }
+                        >
+                          {user.jobTitle}
+                        </Badge>
                       </td>
                       <td className="p-4">
                         <Badge

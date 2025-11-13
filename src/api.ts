@@ -35,7 +35,6 @@ async function request(url: string, options: RequestInit = {}): Promise<any> {
     headers.Authorization = `Bearer ${token}`;
   }
 
-
   const res = await fetch(`${API_URL}${url}`, {
     headers,
     ...options,
@@ -65,12 +64,14 @@ export interface User {
     name: string;
     email: string;
   };
+  jobTitle: "technician" | "engineer";
 }
 
 export interface SignupData {
   email: string;
   password: string;
   name: string;
+  jobTitle: "technician" | "engineer";
 }
 
 export interface LoginResponse {
@@ -97,6 +98,7 @@ export const UserAPI = {
     name: string;
     password: string;
     role: "admin" | "user";
+    jobTitle: "technician" | "engineer";
   }): Promise<{ message: string; user: User }> => {
     return request("/admin/users", {
       method: "POST",
@@ -112,6 +114,7 @@ export const UserAPI = {
       name: string;
       password?: string;
       role: "admin" | "user";
+      jobTitle: "technician" | "engineer";
     }
   ): Promise<{ message: string; user: User }> => {
     return request(`/admin/users/${id}`, {

@@ -143,7 +143,7 @@ router.post("/signup", async (req, res) => {
     const { email, name, password, jobTitle } = req.body;
 
     // Input validation
-    if (!email || !name || !password) {
+    if (!email || !name || !password || !jobTitle) {
       console.log("❌ Validation failed: Missing fields");
       return res
         .status(400)

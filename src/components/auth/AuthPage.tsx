@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // 🔥 ADDED: For navigation
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -20,6 +20,7 @@ export default function AuthPage() {
     email: "",
     password: "",
     name: "",
+    jobTitle: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -72,7 +73,7 @@ export default function AuthPage() {
 
   const toggleMode = () => {
     setIsLogin(!isLogin);
-    setFormData({ email: "", password: "", name: "" });
+    setFormData({ email: "", password: "", name: "", jobTitle: "" });
   };
 
   return (
@@ -110,22 +111,42 @@ export default function AuthPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Name Field (Signup Only) */}
               {!isLogin && (
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input
-                      id="name"
-                      name="name"
-                      type="text"
-                      placeholder="Enter your full name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required={!isLogin}
-                      className="pl-10"
-                    />
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Full Name</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="name"
+                        name="name"
+                        type="text"
+                        placeholder="Enter your full name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required={!isLogin}
+                        className="pl-10"
+                      />
+                    </div>
                   </div>
-                </div>
+                  {/* Job Title Dropdown (Signup Only) */}
+                  <div className="space-y-2">
+                    <Label htmlFor="jobTitle">Job Title</Label>
+                    <select
+                      id="jobTitle"
+                      name="jobTitle"
+                      required={!isLogin}
+                      value={formData.jobTitle}
+                      onChange={handleInputChange}
+                      className="w-full border px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300"
+                    >
+                      <option value="" disabled>
+                        Select your job title
+                      </option>
+                      <option value="engineer">Engineer</option>
+                      <option value="technician">Technician</option>
+                    </select>
+                  </div>
+                </>
               )}
 
               {/* Email Field */}
@@ -174,7 +195,7 @@ export default function AuthPage() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 h-4 w-4 text-gray-400 hover:text-gray-600"
-                    style={{backgroundColor:"#eaf1ff"}}
+                    style={{ backgroundColor: "#eaf1ff" }}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
