@@ -174,6 +174,7 @@ export default function AuthPage() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 h-4 w-4 text-gray-400 hover:text-gray-600"
+                    style={{backgroundColor:"#eaf1ff"}}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -210,6 +211,7 @@ export default function AuthPage() {
                 type="button"
                 onClick={toggleMode}
                 className="font-medium text-blue-600 hover:text-blue-500"
+                style={{ backgroundColor: "#eaf1ff" }}
                 disabled={isLoading}
               >
                 {isLogin ? "Sign up" : "Sign in"}
