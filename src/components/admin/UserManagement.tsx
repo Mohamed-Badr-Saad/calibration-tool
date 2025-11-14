@@ -180,7 +180,8 @@ export default function UserManagement() {
     (u) =>
       u.name.toLowerCase().includes(search.toLowerCase()) ||
       u.email.toLowerCase().includes(search.toLowerCase()) ||
-      u.role.toLowerCase().includes(search.toLowerCase())
+      u.role.toLowerCase().includes(search.toLowerCase())||
+      u.jobTitle?.toLowerCase().includes(search.toLowerCase())
   );
 
   // Statistics
@@ -256,7 +257,7 @@ export default function UserManagement() {
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Input
-                placeholder="Search users by name, email, or role..."
+                placeholder="Search users by name, email, role, or job title..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-10"
