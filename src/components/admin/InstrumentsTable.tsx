@@ -30,6 +30,7 @@ import {
   EyeOff,
   X,
   Filter,
+  RefreshCw,
 } from "lucide-react";
 import type { Instrument } from "@/types/index";
 
@@ -129,18 +130,19 @@ export default function InstrumentTable() {
     updateInstrument,
     removeInstrument,
     refresh,
+    loading,
   } = useInstrumentsContext();
 
   /****to make autocomplete suggestions for upper equipment in the form of creating/editing an instrument */
   const upperEquipments = useMemo(() => {
-    // filter(Boolean): removes null/undefined/empty
-    return Array.from(
-      new Set(
-        instruments
-          .map((ins) => ins["Upper Equipment"])
-          .filter((name) => !!name && typeof name === "string")
-      )
-    );
+     const safeArray = Array.isArray(instruments) ? instruments : [];
+  return Array.from(
+    new Set(
+      safeArray
+        .map((ins) => ins["Upper Equipment"])
+        .filter((name) => !!name && typeof name === "string")
+    )
+  );
   }, [instruments]);
 
   const [upperEquipment, setUpperEquipment] = useState("");
@@ -537,404 +539,422 @@ export default function InstrumentTable() {
                     {showAll ? "Show Less" : "Show All Columns"}
                   </Button>
                 )}
-                <Dialog open={open} onOpenChange={setOpen}>
-                  <DialogTrigger asChild>
-                    <Button
-                      onClick={() => {
-                        setEditing(null);
-                        resetForm();
-                      }}
-                      variant={"outline"}
-                      className="text-red-400 flex items-center gap-2  hover:cursor-pointer hover:text-red-600 "
-                    >
-                      <Plus className="h-4 w-4" />
-                      Add Instrument
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-amber-50 ">
-                    <DialogHeader>
-                      <DialogTitle className="text-xl">
-                        {editing ? "Edit Instrument" : "Add New Instrument"}
-                      </DialogTitle>
-                      <DialogDescription>
-                        {editing
-                          ? "Update the instrument details below and click save to apply changes."
-                          : "Fill in the instrument information below and click save to add it to database."}
-                      </DialogDescription>
-                    </DialogHeader>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      refresh();
+                    }}
+                    className="flex items-center gap-2"
+                  >
+                    <RefreshCw
+                      className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
+                    />
+                    Refresh
+                  </Button>
+                  <Dialog open={open} onOpenChange={setOpen}>
+                    <DialogTrigger asChild>
+                      <Button
+                        onClick={() => {
+                          setEditing(null);
+                          resetForm();
+                        }}
+                        variant={"outline"}
+                        className="text-red-400 flex items-center gap-2  hover:cursor-pointer hover:text-red-600 "
+                      >
+                        <Plus className="h-4 w-4" />
+                        Add Instrument
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-amber-50 ">
+                      <DialogHeader>
+                        <DialogTitle className="text-xl">
+                          {editing ? "Edit Instrument" : "Add New Instrument"}
+                        </DialogTitle>
+                        <DialogDescription>
+                          {editing
+                            ? "Update the instrument details below and click save to apply changes."
+                            : "Fill in the instrument information below and click save to add it to database."}
+                        </DialogDescription>
+                      </DialogHeader>
 
-                    <div className="space-y-6">
-                      {/* Calibration Sheet Form */}
-                      <Card className="border-2 border-blue-200">
-                        <CardHeader className="pb-3">
-                          <CardTitle className="text-lg text-blue-700">
-                            Instrument Type
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-2">
-                            <Label
-                              htmlFor="calibration-form"
-                              className="text-sm font-medium"
-                            >
-                              Calibration Sheet Form *
-                            </Label>
-                            <Select
-                              value={calibrationForm}
-                              onValueChange={handleCalibrationFormChange}
-                            >
-                              <SelectTrigger
-                                style={{
-                                  backgroundColor: "#fffbe8",
-                                  border: "1px solid blue",
-                                  boxShadow: "0 1px 3px rgba(0,0,2,1)",
-                                }}
-                                className="!bg-[#fffbe8] !border-[#d1d5db] !text-gray-900"
-                                id="calibration-form"
-                              >
-                                <SelectValue placeholder="Select calibration sheet form" />
-                              </SelectTrigger>
-                              <SelectContent
-                                style={{ backgroundColor: "#fffbe8" }}
-                              >
-                                {CALIBRATION_FORMS.map((formType) => (
-                                  <SelectItem key={formType} value={formType}>
-                                    {formType}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* Basic Information */}
-                      <Card>
-                        <CardHeader className="pb-3">
-                          <CardTitle className="text-lg">
-                            Basic Information
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-6">
+                        {/* Calibration Sheet Form */}
+                        <Card className="border-2 border-blue-200">
+                          <CardHeader className="pb-3">
+                            <CardTitle className="text-lg text-blue-700">
+                              Instrument Type
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
                             <div className="space-y-2">
                               <Label
-                                htmlFor="upper-equipment"
+                                htmlFor="calibration-form"
                                 className="text-sm font-medium"
                               >
-                                Upper Equipment
+                                Calibration Sheet Form *
                               </Label>
-                              <div className="relative">
-                                <Input
-                                  id="upper-equipment"
-                                  value={upperEquipment}
-                                  onChange={(e) => {
-                                    setUpperEquipment(
-                                      e.target.value.toUpperCase()
-                                    );
-                                    setShowSuggestions(true);
+                              <Select
+                                value={calibrationForm}
+                                onValueChange={handleCalibrationFormChange}
+                              >
+                                <SelectTrigger
+                                  style={{
+                                    backgroundColor: "#fffbe8",
+                                    border: "1px solid blue",
+                                    boxShadow: "0 1px 3px rgba(0,0,2,1)",
                                   }}
-                                  onFocus={() => setShowSuggestions(true)}
-                                  onBlur={() =>
-                                    setTimeout(
-                                      () => setShowSuggestions(false),
-                                      100
-                                    )
-                                  }
+                                  className="!bg-[#fffbe8] !border-[#d1d5db] !text-gray-900"
+                                  id="calibration-form"
+                                >
+                                  <SelectValue placeholder="Select calibration sheet form" />
+                                </SelectTrigger>
+                                <SelectContent
+                                  style={{ backgroundColor: "#fffbe8" }}
+                                >
+                                  {CALIBRATION_FORMS.map((formType) => (
+                                    <SelectItem key={formType} value={formType}>
+                                      {formType}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        {/* Basic Information */}
+                        <Card>
+                          <CardHeader className="pb-3">
+                            <CardTitle className="text-lg">
+                              Basic Information
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <Label
+                                  htmlFor="upper-equipment"
+                                  className="text-sm font-medium"
+                                >
+                                  Upper Equipment
+                                </Label>
+                                <div className="relative">
+                                  <Input
+                                    id="upper-equipment"
+                                    value={upperEquipment}
+                                    onChange={(e) => {
+                                      setUpperEquipment(
+                                        e.target.value.toUpperCase()
+                                      );
+                                      setShowSuggestions(true);
+                                    }}
+                                    onFocus={() => setShowSuggestions(true)}
+                                    onBlur={() =>
+                                      setTimeout(
+                                        () => setShowSuggestions(false),
+                                        100
+                                      )
+                                    }
+                                    placeholder={
+                                      disabledFields.includes("Upper Equipment")
+                                        ? "N/A (disabled)"
+                                        : "Enter upper equipment"
+                                    }
+                                    ref={(el) => {
+                                      formRefs.current["Upper Equipment"] = el;
+                                    }}
+                                    disabled={disabledFields.includes(
+                                      "Upper Equipment"
+                                    )}
+                                  />
+                                  {showSuggestions &&
+                                    filteredSuggestions.length > 0 && (
+                                      <ul
+                                        style={{
+                                          backgroundColor: "#fffbe8",
+                                          maxHeight: "12rem", // Example: 12rem = 192px, adjust as needed
+                                          overflowY: "auto",
+                                        }}
+                                        className="absolute z-10 w-full border border-gray-300 rounded shadow"
+                                      >
+                                        {filteredSuggestions.map(
+                                          (suggestion) => (
+                                            <li
+                                              key={suggestion}
+                                              className="cursor-pointer hover:bg-blue-50 px-4 py-2"
+                                              onMouseDown={() => {
+                                                setUpperEquipment(suggestion);
+                                                setShowSuggestions(false);
+                                              }}
+                                            >
+                                              {suggestion}
+                                            </li>
+                                          )
+                                        )}
+                                      </ul>
+                                    )}
+                                </div>
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label
+                                  htmlFor="tag"
+                                  className="text-sm font-medium"
+                                >
+                                  Tag *
+                                </Label>
+                                <Input
+                                  id="tag"
                                   placeholder={
-                                    disabledFields.includes("Upper Equipment")
+                                    disabledFields.includes("Tag")
                                       ? "N/A (disabled)"
-                                      : "Enter upper equipment"
+                                      : "Enter instrument tag"
                                   }
                                   ref={(el) => {
-                                    formRefs.current["Upper Equipment"] = el;
+                                    formRefs.current["Tag"] = el;
                                   }}
-                                  disabled={disabledFields.includes(
-                                    "Upper Equipment"
-                                  )}
+                                  disabled={disabledFields.includes("Tag")}
                                 />
-                                {showSuggestions &&
-                                  filteredSuggestions.length > 0 && (
-                                    <ul
-                                      style={{
-                                        backgroundColor: "#fffbe8",
-                                        maxHeight: "12rem", // Example: 12rem = 192px, adjust as needed
-                                        overflowY: "auto",
-                                      }}
-                                      className="absolute z-10 w-full border border-gray-300 rounded shadow"
-                                    >
-                                      {filteredSuggestions.map((suggestion) => (
-                                        <li
-                                          key={suggestion}
-                                          className="cursor-pointer hover:bg-blue-50 px-4 py-2"
-                                          onMouseDown={() => {
-                                            setUpperEquipment(suggestion);
-                                            setShowSuggestions(false);
-                                          }}
-                                        >
-                                          {suggestion}
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  )}
                               </div>
                             </div>
+                          </CardContent>
+                        </Card>
 
+                        {/* Range & Unit */}
+                        <Card>
+                          <CardHeader className="pb-3">
+                            <CardTitle className="text-lg">
+                              Range & Unit Configuration
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                              <div className="space-y-2">
+                                <Label
+                                  htmlFor="lrv"
+                                  className="text-sm font-medium"
+                                >
+                                  LRV (Lower Range Value)
+                                </Label>
+                                <Input
+                                  id="lrv"
+                                  type="number"
+                                  placeholder={
+                                    disabledFields.includes("LRV")
+                                      ? "N/A (disabled)"
+                                      : "Enter LRV"
+                                  }
+                                  ref={(el) => {
+                                    formRefs.current["LRV"] = el;
+                                  }}
+                                  disabled={disabledFields.includes("LRV")}
+                                />
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label
+                                  htmlFor="urv"
+                                  className="text-sm font-medium"
+                                >
+                                  URV (Upper Range Value)
+                                </Label>
+                                <Input
+                                  id="urv"
+                                  type="number"
+                                  placeholder={
+                                    disabledFields.includes("URV")
+                                      ? "N/A (disabled)"
+                                      : "Enter URV"
+                                  }
+                                  ref={(el) => {
+                                    formRefs.current["URV"] = el;
+                                  }}
+                                  disabled={disabledFields.includes("URV")}
+                                />
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label
+                                  htmlFor="unit"
+                                  className="text-sm font-medium"
+                                >
+                                  Unit
+                                </Label>
+                                <Input
+                                  id="unit"
+                                  placeholder={
+                                    disabledFields.includes("Unit")
+                                      ? "N/A (disabled)"
+                                      : "e.g., bar, °C, %"
+                                  }
+                                  ref={(el) => {
+                                    formRefs.current["Unit"] = el;
+                                  }}
+                                  disabled={disabledFields.includes("Unit")}
+                                />
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        {/* Valve & Switch */}
+                        <Card>
+                          <CardHeader className="pb-3">
+                            <CardTitle className="text-lg">
+                              Valve & Switch Configuration
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <Label
+                                  htmlFor="valve-size"
+                                  className="text-sm font-medium"
+                                >
+                                  Valve Size (Inch)
+                                </Label>
+                                <Input
+                                  id="valve-size"
+                                  type="number"
+                                  placeholder={
+                                    disabledFields.includes("Valve Size")
+                                      ? "N/A (disabled)"
+                                      : "Enter Valve Size"
+                                  }
+                                  ref={(el) => {
+                                    formRefs.current["Valve Size"] = el;
+                                  }}
+                                  disabled={disabledFields.includes(
+                                    "Valve Size"
+                                  )}
+                                />
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label
+                                  htmlFor="pcv-sp"
+                                  className="text-sm font-medium"
+                                >
+                                  PCV Set Point
+                                </Label>
+                                <Input
+                                  id="pcv-sp"
+                                  placeholder={
+                                    disabledFields.includes("PCV SP")
+                                      ? "N/A (disabled)"
+                                      : "Enter PCV SP"
+                                  }
+                                  type="number"
+                                  ref={(el) => {
+                                    formRefs.current["PCV SP"] = el;
+                                  }}
+                                  disabled={disabledFields.includes("PCV SP")}
+                                />
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label
+                                  htmlFor="switch-healthy"
+                                  className="text-sm font-medium"
+                                >
+                                  Switch Healthy SP
+                                </Label>
+                                <Input
+                                  id="switch-healthy"
+                                  type="number"
+                                  placeholder={
+                                    disabledFields.includes("Switch Healthy SP")
+                                      ? "N/A (disabled)"
+                                      : "Enter healthy setpoint"
+                                  }
+                                  ref={(el) => {
+                                    formRefs.current["Switch Healthy SP"] = el;
+                                  }}
+                                  disabled={disabledFields.includes(
+                                    "Switch Healthy SP"
+                                  )}
+                                />
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label
+                                  htmlFor="switch-active"
+                                  className="text-sm font-medium"
+                                >
+                                  Switch Active SP
+                                </Label>
+                                <Input
+                                  id="switch-active"
+                                  type="number"
+                                  placeholder={
+                                    disabledFields.includes("Switch Active SP")
+                                      ? "N/A (disabled)"
+                                      : "Enter active setpoint"
+                                  }
+                                  ref={(el) => {
+                                    formRefs.current["Switch Active SP"] = el;
+                                  }}
+                                  disabled={disabledFields.includes(
+                                    "Switch Active SP"
+                                  )}
+                                />
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        {/* Comments */}
+                        <Card>
+                          <CardHeader className="pb-3">
+                            <CardTitle className="text-lg">
+                              Additional Information
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
                             <div className="space-y-2">
                               <Label
-                                htmlFor="tag"
+                                htmlFor="comment"
                                 className="text-sm font-medium"
                               >
-                                Tag *
+                                Comments
                               </Label>
-                              <Input
-                                id="tag"
+                              <Textarea
+                                id="comment"
                                 placeholder={
-                                  disabledFields.includes("Tag")
+                                  disabledFields.includes("Comment")
                                     ? "N/A (disabled)"
-                                    : "Enter instrument tag"
+                                    : "Enter any additional comments..."
                                 }
                                 ref={(el) => {
-                                  formRefs.current["Tag"] = el;
+                                  formRefs.current["Comment"] = el;
                                 }}
-                                disabled={disabledFields.includes("Tag")}
+                                rows={3}
+                                disabled={disabledFields.includes("Comment")}
                               />
                             </div>
-                          </div>
-                        </CardContent>
-                      </Card>
+                          </CardContent>
+                        </Card>
 
-                      {/* Range & Unit */}
-                      <Card>
-                        <CardHeader className="pb-3">
-                          <CardTitle className="text-lg">
-                            Range & Unit Configuration
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="space-y-2">
-                              <Label
-                                htmlFor="lrv"
-                                className="text-sm font-medium"
-                              >
-                                LRV (Lower Range Value)
-                              </Label>
-                              <Input
-                                id="lrv"
-                                type="number"
-                                placeholder={
-                                  disabledFields.includes("LRV")
-                                    ? "N/A (disabled)"
-                                    : "Enter LRV"
-                                }
-                                ref={(el) => {
-                                  formRefs.current["LRV"] = el;
-                                }}
-                                disabled={disabledFields.includes("LRV")}
-                              />
-                            </div>
-
-                            <div className="space-y-2">
-                              <Label
-                                htmlFor="urv"
-                                className="text-sm font-medium"
-                              >
-                                URV (Upper Range Value)
-                              </Label>
-                              <Input
-                                id="urv"
-                                type="number"
-                                placeholder={
-                                  disabledFields.includes("URV")
-                                    ? "N/A (disabled)"
-                                    : "Enter URV"
-                                }
-                                ref={(el) => {
-                                  formRefs.current["URV"] = el;
-                                }}
-                                disabled={disabledFields.includes("URV")}
-                              />
-                            </div>
-
-                            <div className="space-y-2">
-                              <Label
-                                htmlFor="unit"
-                                className="text-sm font-medium"
-                              >
-                                Unit
-                              </Label>
-                              <Input
-                                id="unit"
-                                placeholder={
-                                  disabledFields.includes("Unit")
-                                    ? "N/A (disabled)"
-                                    : "e.g., bar, °C, %"
-                                }
-                                ref={(el) => {
-                                  formRefs.current["Unit"] = el;
-                                }}
-                                disabled={disabledFields.includes("Unit")}
-                              />
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* Valve & Switch */}
-                      <Card>
-                        <CardHeader className="pb-3">
-                          <CardTitle className="text-lg">
-                            Valve & Switch Configuration
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                              <Label
-                                htmlFor="valve-size"
-                                className="text-sm font-medium"
-                              >
-                                Valve Size (Inch)
-                              </Label>
-                              <Input
-                                id="valve-size"
-                                type="number"
-                                placeholder={
-                                  disabledFields.includes("Valve Size")
-                                    ? "N/A (disabled)"
-                                    : "Enter Valve Size"
-                                }
-                                ref={(el) => {
-                                  formRefs.current["Valve Size"] = el;
-                                }}
-                                disabled={disabledFields.includes("Valve Size")}
-                              />
-                            </div>
-
-                            <div className="space-y-2">
-                              <Label
-                                htmlFor="pcv-sp"
-                                className="text-sm font-medium"
-                              >
-                                PCV Set Point
-                              </Label>
-                              <Input
-                                id="pcv-sp"
-                                placeholder={
-                                  disabledFields.includes("PCV SP")
-                                    ? "N/A (disabled)"
-                                    : "Enter PCV SP"
-                                }
-                                type="number"
-                                ref={(el) => {
-                                  formRefs.current["PCV SP"] = el;
-                                }}
-                                disabled={disabledFields.includes("PCV SP")}
-                              />
-                            </div>
-
-                            <div className="space-y-2">
-                              <Label
-                                htmlFor="switch-healthy"
-                                className="text-sm font-medium"
-                              >
-                                Switch Healthy SP
-                              </Label>
-                              <Input
-                                id="switch-healthy"
-                                type="number"
-                                placeholder={
-                                  disabledFields.includes("Switch Healthy SP")
-                                    ? "N/A (disabled)"
-                                    : "Enter healthy setpoint"
-                                }
-                                ref={(el) => {
-                                  formRefs.current["Switch Healthy SP"] = el;
-                                }}
-                                disabled={disabledFields.includes(
-                                  "Switch Healthy SP"
-                                )}
-                              />
-                            </div>
-
-                            <div className="space-y-2">
-                              <Label
-                                htmlFor="switch-active"
-                                className="text-sm font-medium"
-                              >
-                                Switch Active SP
-                              </Label>
-                              <Input
-                                id="switch-active"
-                                type="number"
-                                placeholder={
-                                  disabledFields.includes("Switch Active SP")
-                                    ? "N/A (disabled)"
-                                    : "Enter active setpoint"
-                                }
-                                ref={(el) => {
-                                  formRefs.current["Switch Active SP"] = el;
-                                }}
-                                disabled={disabledFields.includes(
-                                  "Switch Active SP"
-                                )}
-                              />
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* Comments */}
-                      <Card>
-                        <CardHeader className="pb-3">
-                          <CardTitle className="text-lg">
-                            Additional Information
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-2">
-                            <Label
-                              htmlFor="comment"
-                              className="text-sm font-medium"
-                            >
-                              Comments
-                            </Label>
-                            <Textarea
-                              id="comment"
-                              placeholder={
-                                disabledFields.includes("Comment")
-                                  ? "N/A (disabled)"
-                                  : "Enter any additional comments..."
-                              }
-                              ref={(el) => {
-                                formRefs.current["Comment"] = el;
-                              }}
-                              rows={3}
-                              disabled={disabledFields.includes("Comment")}
-                            />
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* Action Buttons */}
-                      <div className="flex justify-end gap-3 pt-4 border-t">
-                        <Button
-                          variant="outline"
-                          onClick={() => setOpen(false)}
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          onClick={handleSave}
-                          disabled={!calibrationForm}
-                        >
-                          {editing ? "Update Instrument" : "Save Instrument"}
-                        </Button>
+                        {/* Action Buttons */}
+                        <div className="flex justify-end gap-3 pt-4 border-t">
+                          <Button
+                            variant="outline"
+                            onClick={() => setOpen(false)}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            onClick={handleSave}
+                            disabled={!calibrationForm}
+                          >
+                            {editing ? "Update Instrument" : "Save Instrument"}
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </div>
             </div>
 

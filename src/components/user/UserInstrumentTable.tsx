@@ -1,6 +1,6 @@
 import type { Instrument } from "@/types";
 import { Checkbox } from "@/components/ui/checkbox";
-
+import { Badge } from "lucide-react";
 
 interface Props {
   instruments: Instrument[];
@@ -15,6 +15,22 @@ export default function UserInstrumentTable({
   toggleSelect,
   showAll = false,
 }: Props) {
+  const BADGE_COLORS = {
+    Transmitter: "bg-blue-100 text-blue-800",
+    Gauge: "bg-green-100 text-green-800",
+    "Control Valve": "bg-purple-100 text-purple-800",
+    "On-Off Valve": "bg-orange-100 text-orange-800",
+    Switch: "bg-red-100 text-red-800",
+    PCV: "bg-yellow-100 text-yellow-800",
+  } as const;
+
+  const getBadgeColor = (formType: string) => {
+    return (
+      BADGE_COLORS[formType as keyof typeof BADGE_COLORS] ||
+      "bg-gray-100 text-gray-800"
+    );
+  };
+
   if (!instruments.length) {
     return (
       <div className="w-full text-center text-sm text-gray-400 py-6">
@@ -73,32 +89,48 @@ export default function UserInstrumentTable({
                   onCheckedChange={() => toggleSelect(inst._id!)}
                 />
               </td>
-              <td className="p-2">{inst.Tag}</td>
-              <td className="p-2">{inst["Calibration sheet Form"]}</td>
-              <td className="p-2">{inst["Upper Equipment"]}</td>
+              <td className="p-4">
+                <div className="font-medium text-[1.2em] text-gray-900">
+                  {inst.Tag}
+                </div>
+              </td>
+              <td className="p-4 text-[1.2em]">
+                <div
+                  className={`${getBadgeColor(
+                    inst["Calibration sheet Form"]
+                  )} w-fit rounded-[5px] px-2 py-1 text-xs font-semibold`}
+                >
+                  {inst["Calibration sheet Form"]}
+                </div>
+              </td>
+              <td className="p-4 text-[1.2em] text-gray-600">
+                {inst["Upper Equipment"]}
+              </td>
               {showAll && (
                 <>
-                  <td className="p-2">
+                  <td className="p-2 text-[1.2em]">
                     {inst.LRV !== undefined && inst.URV !== undefined
                       ? `${inst.LRV} - ${inst.URV}`
                       : "N/A"}
                   </td>
-                  <td className="p-2">{inst.Unit}</td>
-                  <td className="p-2">
+                  <td className="p-2 text-[1.2em]">{inst.Unit}</td>
+                  <td className="p-2 text-[1.2em]">
                     {inst["Valve Size"] !== undefined
                       ? `${inst["Valve Size"]}"`
                       : "N/A"}
                   </td>
-                  <td className="p-2">
+                  <td className="p-2 text-[1.2em]">
                     {inst["Switch Healthy SP"] !== undefined &&
                     inst["Switch Active SP"] !== undefined
                       ? `H:${inst["Switch Healthy SP"]} / A:${inst["Switch Active SP"]}`
                       : "N/A"}
                   </td>
-                  <td className="p-2">{inst["PCV SP"] || "N/A"}</td>
+                  <td className="p-2 text-[1.2em]">
+                    {inst["PCV SP"] || "N/A"}
+                  </td>
                 </>
               )}
-              <td className="p-2">{inst.Comment}</td>
+              <td className="p-2 text-[1.2em]">{inst.Comment}</td>
             </tr>
           ))}
         </tbody>

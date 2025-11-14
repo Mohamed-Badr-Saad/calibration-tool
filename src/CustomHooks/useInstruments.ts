@@ -7,6 +7,7 @@
     updateInstrument: (id: string, instrument: Instrument) => Promise<void>;
     removeInstrument: (id: string) => Promise<void>;
     refresh: () => Promise<void>;
+    loading: boolean;
   }
 
   export const InstrumentContext = createContext<InstrumentContextType | undefined>(undefined);

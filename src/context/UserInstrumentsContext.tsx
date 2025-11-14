@@ -1,26 +1,25 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { InstrumentAPI } from "@/api"; // Replace with actual path
 import type { Instrument } from "@/types";
 import { UserInstrumentsContext } from "@/CustomHooks/useUserInstruments";
 
-
-
-export const UserInstrumentsProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const UserInstrumentsProvider: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
   const [instruments, setInstruments] = useState<Instrument[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchInstruments = useCallback(async () => {
-    if (instruments.length > 0) return; // Prevent refetch unless needed
+  const fetchInstruments = async () => {
     setLoading(true);
-    try {
-      const data = await InstrumentAPI.getAll(); // API call to get instruments
-      setInstruments(data);
-    } finally {
-      setLoading(false);
-    }
-  }, [instruments]);
+    const data = await InstrumentAPI.getAll();
+    setInstruments(data);
+    setLoading(false);
+  };
+
+  // 👇 fetch instruments once when provider mounts
+  useEffect(() => {
+    fetchInstruments();
+  }, []);
 
   return (
     <UserInstrumentsContext.Provider
@@ -30,4 +29,3 @@ export const UserInstrumentsProvider: React.FC<{ children: React.ReactNode }> = 
     </UserInstrumentsContext.Provider>
   );
 };
-

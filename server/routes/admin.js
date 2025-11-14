@@ -1,4 +1,3 @@
-// routes/admin.js - UPDATED FOR ANY ADMIN ACCESS
 import express from "express";
 import User from "../models/User.js";
 import { adminAuth, superAdminAuth } from "../middleware/auth.js";

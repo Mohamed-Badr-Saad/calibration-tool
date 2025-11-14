@@ -1,4 +1,3 @@
-// routes/auth.js - COMPLETELY FIXED VERSION
 import express from "express";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
