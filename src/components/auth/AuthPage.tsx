@@ -81,8 +81,15 @@ export default function AuthPage() {
       <div className="w-full max-w-md space-y-6">
         {/* Company Header */}
         <div className="text-center space-y-2">
-          <div className="flex items-center justify-center space-x-2">
-            <Building2 className="h-8 w-8 text-blue-600" />
+          <div className="flex flex-col items-center justify-center space-x-2">
+            {/* <Building2 className="h-8 w-8 text-blue-600" /> */}
+                   <div>
+                <img
+                  src={"/Rashid-icon.ico"}
+                  alt="Rashid Logo"
+                  className="w-[100px]"
+                />
+              </div>
             <h1 className="text-2xl font-bold text-gray-900">RASHPETCO</h1>
           </div>
           <p className="text-gray-600">Instrument Management System</p>
