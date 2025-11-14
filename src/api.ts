@@ -5,9 +5,9 @@ import type {
   ToleranceSettings,
 } from "./types";
 
-export const API_URL = "http://localhost:5000/api"; //local api url
+// export const API_URL = "http://localhost:5000/api"; //local api url
 
-// export const API_URL = "https://calibration-tool-server.vercel.app/api"; //vercel api url
+export const API_URL = "https://calibration-tool-server.vercel.app/api"; //vercel api url
 
 // 🔥 Token Management
 const getToken = (): string | null => {
