@@ -135,14 +135,14 @@ export default function InstrumentTable() {
 
   /****to make autocomplete suggestions for upper equipment in the form of creating/editing an instrument */
   const upperEquipments = useMemo(() => {
-     const safeArray = Array.isArray(instruments) ? instruments : [];
-  return Array.from(
-    new Set(
-      safeArray
-        .map((ins) => ins["Upper Equipment"])
-        .filter((name) => !!name && typeof name === "string")
-    )
-  );
+    const safeArray = Array.isArray(instruments) ? instruments : [];
+    return Array.from(
+      new Set(
+        safeArray
+          .map((ins) => ins["Upper Equipment"])
+          .filter((name) => !!name && typeof name === "string")
+      )
+    );
   }, [instruments]);
 
   const [upperEquipment, setUpperEquipment] = useState("");
@@ -542,6 +542,8 @@ export default function InstrumentTable() {
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
+                    size="sm"
+                    disabled={loading}
                     onClick={() => {
                       refresh();
                     }}
