@@ -10,7 +10,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Search, X, ChevronDown, RefreshCw, Eye } from "lucide-react";
+import {
+  Search,
+  X,
+  ChevronDown,
+  RefreshCw,
+  Eye,
+  EyeOff,
+  FileSpreadsheet,
+} from "lucide-react";
 import UserInstrumentTable from "@/components/user/UserInstrumentTable";
 import { useUserInstrumentsContext } from "@/CustomHooks/useUserInstruments";
 import { useNavigate } from "react-router-dom";
@@ -162,10 +170,13 @@ export default function UserDashboard() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="border-2 border-blue-200 bg-blue-50/50 p-8 rounded-2xl">
+          <div className="border-2 border-blue-200 bg-blue-50/50 p-8 rounded-2xl mb-4">
             <div className="flex justify-between mb-8 gap-3">
-              <div className="text-lg font-semibold text-blue-700">
-                Calibration Sheets Generation
+              <div className="text-lg font-semibold text-blue-700  flex gap-1.5">
+                <div>
+                  <FileSpreadsheet className="h-6 w-6 text-blue-800" />
+                </div>
+                <p> Calibration Sheets Generation</p>
               </div>
               <Button
                 variant="outline"
@@ -212,7 +223,7 @@ export default function UserDashboard() {
                 <SelectTrigger className=" bg-blue-800 shadow-stone-500">
                   <SelectValue placeholder="All Types" />
                 </SelectTrigger>
-                <SelectContent className="bg-blue-50/50">
+                <SelectContent style={{ background: "rgb(239 246 255)" }}>
                   <SelectItem value="all">All Types</SelectItem>
                   {typeOptions.map((type) => (
                     <SelectItem
@@ -226,7 +237,7 @@ export default function UserDashboard() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex gap-2 mb-8">
+            <div className="flex gap-2 mb-4">
               <Button
                 onClick={applySearch}
                 disabled={!hasInputChanges}
@@ -236,129 +247,172 @@ export default function UserDashboard() {
                 Search Instruments
               </Button>
               <Button
+                variant="outline"
                 onClick={showAllInstruments}
                 className="flex items-center gap-2 shadow-stone-500"
               >
                 <Eye className="h-4 w-4" />
                 Show All Instruments ({instruments?.length || 0})
               </Button>
-              <Button
-                className="flex items-center gap-2 shadow-stone-500"
-                onClick={() => setShowAll((prev) => !prev)}
-              >
-                {showAll ? "Show Less Columns" : "Show More Columns"}
-              </Button>
+              {filtered.length > 0 && (
+                <Button
+                  className="flex items-center gap-2 shadow-stone-500"
+                  onClick={() => setShowAll((prev) => !prev)}
+                >
+                  {showAll ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                  {showAll ? "Show Less Columns" : "Show More Columns"}
+                </Button>
+              )}
               {hasActiveFilters && (
                 <Button
                   variant="outline"
+                  size="sm"
                   onClick={clearAllFilters}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 text-red-600 hover:text-red-700 ml-5 shadow-stone-500"
                 >
-                  Clear Filters <X className="h-4 w-4" />
+                  <X className="h-4 w-4" />
+                  Clear & Reset All filters
                 </Button>
               )}
             </div>
-            {hasActiveFilters && (
-              <div className="flex flex-wrap gap-2 mb-4">
-                {appliedFilters.tag && (
-                  <Badge
-                    variant="secondary"
-                    className="flex items-center gap-1"
-                  >
-                    Tag: {appliedFilters.tag}
-                    <button
-                      onClick={() => handleRemoveFilter("tag")}
-                      title="Remove filter"
-                    >
-                      <X className="h-3 w-3 text-red-600" />
-                    </button>
-                  </Badge>
-                )}
-                {appliedFilters.upperEquipment && (
-                  <Badge
-                    variant="secondary"
-                    className="flex items-center gap-1"
-                  >
-                    Equipment: {appliedFilters.upperEquipment}
-                    <button
-                      onClick={() => handleRemoveFilter("upperEquipment")}
-                      title="Remove filter"
-                    >
-                      <X className="h-3 w-3 text-red-600" />
-                    </button>
-                  </Badge>
-                )}
-                {appliedFilters.instrumentType && (
-                  <Badge
-                    variant="secondary"
-                    className="flex items-center gap-1"
-                  >
-                    Type: {appliedFilters.instrumentType}
-                    <button
-                      onClick={() => handleRemoveFilter("instrumentType")}
-                      title="Remove filter"
-                    >
-                      <X className="h-3 w-3 text-red-600" />
-                    </button>
-                  </Badge>
-                )}
-              </div>
-            )}
-            <div className="flex gap-2 mb-2">
-              <Button variant="outline" size="sm" onClick={selectAllFiltered}>
-                Select All
-              </Button>
-              <Button variant="outline" size="sm" onClick={deselectAll}>
-                Deselect All
-              </Button>
-              <Button variant="outline" size="sm" onClick={clearSelection}>
-                Clear All
-              </Button>
-              <Button
-                className="btn btn-primary"
-                disabled={selected.length === 0}
-                onClick={proceedToCalibration}
-                variant="outline"
-              >
-                Proceed to Calibration ({selected.length})
-              </Button>
-            </div>
-          </div>
 
-          <UserInstrumentTable
-            instruments={filtered}
-            selected={selected}
-            toggleSelect={toggleSelect}
-            showAll={showAll}
-          />
-          {hasSearched && filtered.length === 0 && (
-            <div className="text-center py-16 border rounded-2xl p-4 mt-8">
-              <div className="text-gray-500 max-w-md mx-auto">
-                No instruments found. Adjust your filters or fetch all.
-              </div>
+            <div className="flex flex-row g-4 mb-4">
+              {/* Applied Filters Display */}
+              {hasActiveFilters && hasSearched && (
+                <div className="flex flex-wrap gap-2 pt-4 ">
+                  <span className="text-sm font-medium text-blue-700">
+                    Active Filters:
+                  </span>
+                  {appliedFilters.tag && (
+                    <Badge
+                      variant="secondary"
+                      className="flex items-center gap-1"
+                    >
+                      Tag: {appliedFilters.tag}
+                      <button
+                        onClick={() => handleRemoveFilter("tag")}
+                        className="h-3 w-3 rounded-full hover:bg-red-100 flex items-center justify-center"
+                      >
+                        <X className="h-2 w-2 text-red-600" />
+                      </button>
+                    </Badge>
+                  )}
+                  {appliedFilters.upperEquipment && (
+                    <Badge
+                      variant="secondary"
+                      className="flex items-center gap-1"
+                    >
+                      Equipment: {appliedFilters.upperEquipment}
+                      <button
+                        onClick={() => handleRemoveFilter("upperEquipment")}
+                        className="h-3 w-3 rounded-full hover:bg-red-100 flex items-center justify-center"
+                      >
+                        <X className="h-2 w-2 text-red-600" />
+                      </button>
+                    </Badge>
+                  )}
+                  {appliedFilters.instrumentType && (
+                    <Badge
+                      variant="secondary"
+                      className="flex items-center gap-1"
+                    >
+                      Type: {appliedFilters.instrumentType}
+                      <button
+                        onClick={() => handleRemoveFilter("instrumentType")}
+                        className="h-3 w-3 rounded-full hover:bg-red-100 flex items-center justify-center"
+                      >
+                        <X className="h-2 w-2 text-red-600" />
+                      </button>
+                    </Badge>
+                  )}
+                </div>
+              )}
             </div>
-          )}
-          {!hasSearched && (
-            <div className="text-center py-16 border rounded-2xl p-4 mt-8">
-              <div className="mb-6">
-                <Search className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <div className="text-xl font-medium text-gray-600 mb-2">
-                  Ready to Search
-                </div>
-                <div className="text-gray-500 max-w-md mx-auto">
-                  Use the search filters above to find specific instruments, or
-                  click "Show All Instruments" to view everything.
-                </div>
-              </div>
-              <div className="flex justify-center gap-4">
+            <div className="flex justify-between mb-2 w-full  ">
+              <div className="flex gap-2">
                 <Button
-                  onClick={showAllInstruments}
-                  className="flex items-center gap-2 shadow-stone-500"
+                  variant="outline"
+                  onClick={selectAllFiltered}
+                  style={{ backgroundColor: "rgb(34 197 94)" }}
                 >
-                  <Eye className="h-4 w-4" />
-                  Show All Instruments ({instruments?.length || 0})
+                  Select All
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={deselectAll}
+                  style={{ backgroundColor: " rgb(254 240 138)" }}
+                >
+                  Deselect All
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={clearSelection}
+                  style={{ backgroundColor: " rgb(248 113 113)" }}
+                >
+                  Clear All
                 </Button>
               </div>
+              <div className="flex justify-end ">
+                <Button
+                  className="flex items-center gap-2 shadow-green-900"
+                  disabled={selected.length === 0}
+                  onClick={proceedToCalibration}
+                  variant="outline"
+                  style={{ backgroundColor: " rgb(22 135 52)" }}
+                >
+                  Proceed to Calibration ({selected.length})
+                </Button>
+              </div>
+            </div>
+          </div>
+          {loading ? (
+            <div className="p-8 text-center border rounded-2xl">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
+              <p className="mt-2 text-gray-600">Loading Instruments...</p>
+            </div>
+          ) : (
+            <div>
+              <UserInstrumentTable
+                instruments={filtered}
+                selected={selected}
+                toggleSelect={toggleSelect}
+                showAll={showAll}
+              />
+
+              {hasSearched && filtered.length === 0 && (
+                <div className="text-center py-16 border rounded-2xl p-4 mt-8">
+                  <div className="text-gray-500 max-w-md mx-auto">
+                    No instruments found. Adjust your filters or fetch all.
+                  </div>
+                </div>
+              )}
+              {!hasSearched && (
+                <div className="text-center py-16 border rounded-2xl p-4 mt-8">
+                  <div className="mb-6">
+                    <Search className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <div className="text-xl font-medium text-gray-600 mb-2">
+                      Ready to Search
+                    </div>
+                    <div className="text-gray-500 max-w-md mx-auto">
+                      Use the search filters above to find specific instruments,
+                      or click "Show All Instruments" to view everything.
+                    </div>
+                  </div>
+                  <div className="flex justify-center gap-4">
+                    <Button
+                      onClick={showAllInstruments}
+                      className="flex items-center gap-2 shadow-stone-500"
+                    >
+                      <Eye className="h-4 w-4" />
+                      Show All Instruments ({instruments?.length || 0})
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </CardContent>

@@ -206,13 +206,9 @@ export default function UserInstrumentTable({
     getScrollElement: () => parentRef.current,
     estimateSize: () => rowHeight,
   });
-   if (!instruments.length) {
-    return (
-null
-    );
+  if (!instruments.length) {
+    return null;
   }
-
-
   return (
     <div className="border rounded-2xl p-4">
       <div

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -33,6 +33,8 @@ import {
   RefreshCw,
 } from "lucide-react";
 import type { Instrument } from "@/types/index";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { Checkbox } from "@radix-ui/react-checkbox";
 
 const CALIBRATION_FORMS = [
   "Transmitter",
@@ -483,6 +485,15 @@ export default function InstrumentTable() {
 
   const disabledFields = getDisabledFields();
 
+  const parentRef = React.useRef<HTMLDivElement | null>(null);
+  const safeArray = Array.isArray(instruments) ? instruments : [];
+  const rowHeight: number = 48;
+  const height: number = 444;
+  const rowVirtualizer = useVirtualizer({
+    count: safeArray.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => rowHeight,
+  });
   return (
     <div className="space-y-6 min-w-[50%]">
       {/* Header with Advanced Search */}
@@ -524,25 +535,9 @@ export default function InstrumentTable() {
               </Button>
 
               <div className="flex gap-2">
-                {hasSearched && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowAll(!showAll)}
-                    className="flex items-center gap-2"
-                  >
-                    {showAll ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                    {showAll ? "Show Less" : "Show All Columns"}
-                  </Button>
-                )}
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
-                    size="sm"
                     disabled={loading}
                     onClick={() => {
                       refresh();
@@ -973,19 +968,6 @@ export default function InstrumentTable() {
                       <Search className="h-5 w-5" />
                       Search Instruments
                     </CardTitle>
-                    <div className="flex gap-2">
-                      {hasActiveFilters && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={clearAllFilters}
-                          className="flex items-center gap-2 text-red-600 hover:text-red-700"
-                        >
-                          <X className="h-4 w-4" />
-                          Clear & Reset
-                        </Button>
-                      )}
-                    </div>
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -1066,13 +1048,22 @@ export default function InstrumentTable() {
                             setHasSearched(true);
                           }}
                         >
-                          <SelectTrigger id="search-type">
-                            <SelectValue placeholder="All instrument types" />
+                          <SelectTrigger
+                            id="search-type"
+                            className=" bg-blue-800 shadow-stone-500"
+                          >
+                            <SelectValue placeholder="All  types" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent
+                            style={{ background: "rgb(239 246 255)" }}
+                          >
                             <SelectItem value="all">All Types</SelectItem>
                             {CALIBRATION_FORMS.map((formType) => (
-                              <SelectItem key={formType} value={formType}>
+                              <SelectItem
+                                key={formType}
+                                value={formType}
+                                className="border-b border-gray-300 hover:bg-gray-300"
+                              >
                                 {formType}
                               </SelectItem>
                             ))}
@@ -1095,11 +1086,36 @@ export default function InstrumentTable() {
                       <Button
                         variant="outline"
                         onClick={showAllInstruments}
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 shadow-stone-500"
                       >
                         <Eye className="h-4 w-4" />
-                        Show All Instruments
+                        Show All Instruments ({instruments?.length || 0})
                       </Button>
+                      {hasSearched && (
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowAll(!showAll)}
+                          className="flex items-center gap-2"
+                        >
+                          {showAll ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                          {showAll ? "Show Less Columns" : "Show More Columns"}
+                        </Button>
+                      )}
+                      {hasActiveFilters && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={clearAllFilters}
+                          className="flex items-center gap-2 text-red-600 hover:text-red-700 ml-5 shadow-stone-500"
+                        >
+                          <X className="h-4 w-4" />
+                          Clear & Reset All filters
+                        </Button>
+                      )}
 
                       <span className="text-sm text-gray-500 flex items-center">
                         💡 Press Enter in search fields or click Search button
@@ -1165,174 +1181,156 @@ export default function InstrumentTable() {
       </Card>
 
       {/* Table with Empty State until Search */}
-      <Card>
-        <CardContent className="p-0">
-          {!hasSearched ? (
-            <div className="text-center py-16">
-              <div className="mb-6">
-                <Search className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <div className="text-xl font-medium text-gray-600 mb-2">
-                  Ready to Search
-                </div>
-                <div className="text-gray-500 max-w-md mx-auto">
-                  Use the search filters above to find specific instruments, or
-                  click "Show All Instruments" to view everything.
-                </div>
-              </div>
-              <div className="flex justify-center gap-4">
-                <Button
-                  onClick={showAllInstruments}
-                  className="flex items-center gap-2"
-                >
-                  <Eye className="h-4 w-4" />
-                  Show All Instruments ({instruments?.length || 0})
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowAdvancedSearch(true)}
-                >
-                  <Search className="h-4 w-4 mr-2" />
-                  Start Searching
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 border-b">
-                  <tr>
-                    <th className="text-left p-4 font-medium text-gray-700">
-                      Tag
-                    </th>
-                    <th className="text-left p-4 font-medium text-gray-700">
-                      Type
-                    </th>
-                    <th className="text-left p-4 font-medium text-gray-700">
-                      Upper Equipment
-                    </th>
-                    {showAll && (
-                      <>
-                        <th className="text-left p-4 font-medium text-gray-700">
-                          Range
-                        </th>
-                        <th className="text-left p-4 font-medium text-gray-700">
-                          Unit
-                        </th>
-                        <th className="text-left p-4 font-medium text-gray-700">
-                          Valve Size
-                        </th>
-                        <th className="text-left p-4 font-medium text-gray-700">
-                          Switch SP
-                        </th>
-                        <th className="text-left p-4 font-medium text-gray-700">
-                          PCV SP
-                        </th>
-                      </>
-                    )}
-                    <th className="text-left p-4 font-medium text-gray-700">
-                      Comment
-                    </th>
-                    <th className="text-right p-4 font-medium text-gray-700">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y">
-                  {filtered.map((inst) => (
-                    <tr
-                      key={inst._id}
-                      className="hover:bg-gray-50 transition-colors"
-                    >
-                      <td className="p-4">
-                        <div className="font-medium text-gray-900">
-                          {inst.Tag}
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <Badge
-                          className={getBadgeColor(
-                            inst["Calibration sheet Form"]
-                          )}
-                        >
-                          {inst["Calibration sheet Form"]}
-                        </Badge>
-                      </td>
-                      <td className="p-4 text-gray-600">
-                        {inst["Upper Equipment"]}
-                      </td>
-                      {showAll && (
-                        <>
-                          <td className="p-4 text-gray-600">
-                            {inst.LRV !== undefined && inst.URV !== undefined
-                              ? `${inst.LRV} - ${inst.URV}`
-                              : "N/A"}
-                          </td>
-                          <td className="p-4 text-gray-600">
-                            {inst.Unit || "N/A"}
-                          </td>
-                          <td className="p-4 text-gray-600">
-                            {inst["Valve Size"] !== undefined
-                              ? `${inst["Valve Size"]}"`
-                              : "N/A"}
-                          </td>
-                          <td className="p-4 text-gray-600">
-                            {inst["Switch Healthy SP"] !== undefined &&
-                            inst["Switch Active SP"] !== undefined
-                              ? `H:${inst["Switch Healthy SP"]} / A:${inst["Switch Active SP"]}`
-                              : "N/A"}
-                          </td>
-                          <td className="p-4 text-gray-600">
-                            {inst["PCV SP"] || "N/A"}
-                          </td>
-                        </>
-                      )}
-                      <td className="p-4 text-gray-600 max-w-xs truncate">
-                        {inst.Comment || "No comments"}
-                      </td>
-                      <td className="p-4">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleEditClick(inst)}
-                            className="h-8 w-8 p-0"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleDelete(inst._id!)}
-                            className="h-8 w-8 p-0"
-                            style={{ color: "red" }}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              {filtered.length === 0 && (
-                <div className="text-center py-12">
-                  <div className="text-gray-500 text-lg mb-2">
-                    No instruments found
+      {loading ? (
+        <div className="p-8 text-center border rounded-2xl">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Loading Instruments...</p>
+        </div>
+      ) : (
+        <Card>
+          <CardContent className="p-0">
+            {!hasSearched ? (
+              <div className="text-center py-16">
+                <div className="mb-6">
+                  <Search className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                  <div className="text-xl font-medium text-gray-600 mb-2">
+                    Ready to Search
                   </div>
-                  <div className="text-gray-400 text-sm mb-4">
-                    Try adjusting your search filters or search for different
-                    criteria
+                  <div className="text-gray-500 max-w-md mx-auto">
+                    Use the search filters above to find specific instruments,
+                    or click "Show All Instruments" to view everything.
                   </div>
-                  <Button variant="outline" onClick={showAllInstruments}>
-                    Show All Instruments Instead
+                </div>
+                <div className="flex justify-center gap-4">
+                  <Button
+                    onClick={showAllInstruments}
+                    className="flex items-center gap-2 shadow-stone-500"
+                  >
+                    <Eye className="h-4 w-4" />
+                    Show All Instruments ({instruments?.length || 0})
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowAdvancedSearch(true)}
+                  >
+                    <Search className="h-4 w-4 mr-2" />
+                    Start Searching
                   </Button>
                 </div>
-              )}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+              </div>
+            ) : (
+              <div className="p-4">
+                <div
+                  className={`grid ${
+                    showAll ? "grid-cols-10" : "grid-cols-5"
+                  } font-semibold bg-gray-50 py-2 `}
+                >
+                  <div>Tag</div>
+                  <div>Type</div>
+                  <div>Upper Equipment</div>
+                  {showAll && (
+                    <>
+                      <div>Range</div>
+                      <div>Unit</div>
+                      <div>Valve Size</div>
+                      <div>Switch SP</div>
+                      <div>PCV SP</div>
+                    </>
+                  )}
+                  <div>Comment</div>
+                  <div className="flex justify-end mr-10">Actions</div>
+                </div>
+                <div
+                  ref={parentRef}
+                  style={{ height, overflow: "auto", position: "relative" }}
+                >
+                  <div
+                    style={{
+                      height: `${rowVirtualizer.getTotalSize()}px`,
+                      position: "relative",
+                    }}
+                  >
+                    {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                      const inst = safeArray[virtualRow.index];
+                      return (
+                        <div
+                          key={inst._id}
+                          className={`grid items-center border-b ${
+                            showAll ? "grid-cols-10" : "grid-cols-5"
+                          }`}
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            transform: `translateY(${virtualRow.start}px)`,
+                            minHeight: rowHeight,
+                          }}
+                        >
+                          <div className="font-medium">{inst.Tag}</div>
+                          <div>
+                            <span
+                              className={`${getBadgeColor(
+                                inst["Calibration sheet Form"]
+                              )} w-fit rounded-[5px] px-2 py-1 text-xs font-semibold`}
+                            >
+                              {inst["Calibration sheet Form"]}
+                            </span>
+                          </div>
+                          <div>{inst["Upper Equipment"]}</div>
+                          {showAll && (
+                            <>
+                              <div>
+                                {inst.LRV !== undefined &&
+                                inst.URV !== undefined
+                                  ? `${inst.LRV} - ${inst.URV}`
+                                  : "N/A"}
+                              </div>
+                              <div>{inst.Unit || "N/A"}</div>
+                              <div>
+                                {inst["Valve Size"] !== undefined
+                                  ? `${inst["Valve Size"]}"`
+                                  : "N/A"}
+                              </div>
+                              <div>
+                                {inst["Switch Healthy SP"] !== undefined &&
+                                inst["Switch Active SP"] !== undefined
+                                  ? `H:${inst["Switch Healthy SP"]} / A:${inst["Switch Active SP"]}`
+                                  : "N/A"}
+                              </div>
+                              <div>{inst["PCV SP"] || "N/A"}</div>
+                            </>
+                          )}
+                          <div>{inst.Comment}</div>
+                          <div className="flex justify-end gap-2 mr-5">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleEditClick(inst)}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleDelete(inst._id!)}
+                              className="h-8 w-8 p-0"
+                              style={{ color: "red" }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

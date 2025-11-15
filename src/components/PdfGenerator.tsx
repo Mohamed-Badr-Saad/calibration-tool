@@ -790,7 +790,7 @@ export const PdfGenerator: React.FC<PdfGeneratorProps> = ({ forms }) => (
           </View>
           <Image
             src="./Rashid-Logo.jpg"
-            style={{ width: 60, height: 60, marginLeft: "auto" }}
+            style={{ width: 50, height: 50, marginLeft: "auto", marginBottom: 5 }}
           />
         </View>
 

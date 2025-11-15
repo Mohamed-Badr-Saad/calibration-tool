@@ -171,12 +171,19 @@ export default function CalibrationPage() {
   }, [tech]);
   // Wait for data to load
   if (!instruments || technicians.length === 0 || engineers.length === 0) {
-    return <div className="p-4 text-center">Loading calibration data...</div>;
+    return (
+      <div className="p-8 text-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
+        <div className="p-4 text-center w-screen">
+          Loading calibration data...
+        </div>{" "}
+      </div>
+    );
   }
 
   if (selectedInstruments.length === 0) {
     return (
-      <div className="p-4 text-center">
+      <div className="p-4 text-center w-sc">
         <p>No instruments selected or invalid selection.</p>
         <Button onClick={() => navigate("/user/dashboard")}>
           Back to Dashboard
@@ -320,7 +327,11 @@ export default function CalibrationPage() {
                 // style={{ backgroundColor: "#fffbe8" }}
               >
                 {technicians.map((tech) => (
-                  <SelectItem key={tech._id} value={tech.name} className="border-b border-gray-200 hover:bg-gray-300">
+                  <SelectItem
+                    key={tech._id}
+                    value={tech.name}
+                    className="border-b border-gray-200 hover:bg-gray-300"
+                  >
                     {tech.name}
                   </SelectItem>
                 ))}
