@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, Save, RotateCcw } from "lucide-react";
+import { Loader2, Save, RotateCcw, RefreshCw } from "lucide-react";
 import { useTolerance } from "@/CustomHooks/useTolerance";
 import type { ToleranceSettings } from "@/types/index";
 
@@ -24,7 +23,8 @@ const DEFAULT_TOLERANCES: Omit<
 
 export default function ToleranceTable() {
   // 🔥 Use the tolerance context
-  const { tolerances, loading, error, updateTolerance } = useTolerance();
+  const { tolerances, loading, error, updateTolerance, refresh } =
+    useTolerance();
 
   // Local state for form data
   const [localTolerances, setLocalTolerances] = useState(DEFAULT_TOLERANCES);
@@ -137,8 +137,10 @@ export default function ToleranceTable() {
     return (
       <Card>
         <CardContent className="flex items-center justify-center p-8">
-          <Loader2 className="h-8 w-8 animate-spin" />
-          <span className="ml-2">Loading tolerance settings...</span>
+          <div className="p-8 text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
+            <p className="mt-2 text-gray-600">Loading tolerance settings...</p>
+          </div>
         </CardContent>
       </Card>
     );
@@ -347,6 +349,17 @@ export default function ToleranceTable() {
           >
             <RotateCcw className="h-4 w-4" />
             Reset to Defaults
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={() => {
+              refresh();
+            }}
+            className="flex items-center gap-2"
+          >
+            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+            Refresh
           </Button>
         </div>
 
