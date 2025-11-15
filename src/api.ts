@@ -7,7 +7,10 @@ import type {
 
 // export const API_URL = "http://localhost:5000/api"; //local api url
 
-export const API_URL = "https://calibration-tool-server.vercel.app/api"; //vercel api url
+// export const API_URL = "https://calibration-tool-server.vercel.app/api"; //vercel api url
+
+const API_URL = "/api";  // Calls to the same deployment where frontend lives (serverless vercel feature)
+
 
 // 🔥 Token Management
 const getToken = (): string | null => {
