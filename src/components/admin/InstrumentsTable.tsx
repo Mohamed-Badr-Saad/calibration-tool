@@ -615,7 +615,11 @@ export default function InstrumentTable() {
                                   style={{ backgroundColor: "#fffbe8" }}
                                 >
                                   {CALIBRATION_FORMS.map((formType) => (
-                                    <SelectItem key={formType} value={formType}>
+                                    <SelectItem
+                                      key={formType}
+                                      value={formType}
+                                      className="border-b border-gray-300 hover:bg-blue-50"
+                                    >
                                       {formType}
                                     </SelectItem>
                                   ))}
