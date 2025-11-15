@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, User, Building2, Image } from "lucide-react";
+import { LogOut, User} from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/CustomHooks/useAuth";
 import UserDashboard from "@/pages/UserDashboard";
