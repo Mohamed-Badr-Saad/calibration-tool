@@ -1,6 +1,5 @@
 import type { Instrument } from "@/types";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "lucide-react";
 
 interface Props {
   instruments: Instrument[];
