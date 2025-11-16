@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import User from "../models/User";
+import User from "./models/User";
 import bcrypt from "bcryptjs";
 
 async function dbConnect() {
