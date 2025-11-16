@@ -1,14 +1,14 @@
-const technicianSchema = new mongoose.Schema({
+const engineerSchema = new mongoose.Schema({
   name: { type: String, required: true },
 });
 
-const Technician = mongoose.model("Technician", technicianSchema);
+const Engineer = mongoose.model("Engineer", engineerSchema);
 
-// Utility for MongoDB connection (place elsewhere if re-used)
 async function dbConnect() {
   if (mongoose.connection.readyState >= 1) return;
   return mongoose.connect(process.env.MONGO_URI);
 }
+
 export default async function handler(req, res) {
   const { method } = req;
   const { id } = req.query;
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
   if (method === "PUT") {
     try {
-      const updated = await Technician.findByIdAndUpdate(id, req.body, {
+      const updated = await Engineer.findByIdAndUpdate(id, req.body, {
         new: true,
       });
       res.status(200).json(updated);
