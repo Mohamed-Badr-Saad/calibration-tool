@@ -11,6 +11,7 @@ async function dbConnect() {
   return mongoose.connect(process.env.MONGO_URI);
 }
 
+
 export default async function handler(req, res) {
   console.log("Incoming request method:", req.method);
   console.log("Request URL:", req.url);
@@ -37,7 +38,36 @@ export default async function handler(req, res) {
     }
   }
 
-  // Add GET, DELETE as needed or keep as previously shown.
+  if (method === "GET") {
+    console.log(`Handling GET for Technician ID: ${id}`);
+    try {
+      const tech = await Technician.findById(id);
+      if (!tech) {
+        console.log("Technician not found");
+        return res.status(404).json({ message: "Technician not found" });
+      }
+      return res.status(200).json(tech);
+    } catch (err) {
+      console.error("GET error:", err);
+      return res.status(500).json({ message: err.message });
+    }
+  }
+
+  if (method === "DELETE") {
+    console.log(`Handling DELETE for Technician ID: ${id}`);
+    try {
+      const deletedTech = await Technician.findByIdAndDelete(id);
+      if (!deletedTech) {
+        console.log("Technician not found for delete");
+        return res.status(404).json({ message: "Technician not found" });
+      }
+      console.log("Technician deleted successfully");
+      return res.status(200).json({ message: "Technician deleted successfully" });
+    } catch (err) {
+      console.error("DELETE error:", err);
+      return res.status(500).json({ message: err.message });
+    }
+  }
 
   console.log(`Method ${method} not allowed`);
   res.setHeader("Allow", ["GET", "PUT", "DELETE"]);
