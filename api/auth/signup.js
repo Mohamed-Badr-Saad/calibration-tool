@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import User from "../../models/User";
+import User from "/models/User";
 
 async function dbConnect() {
   if (mongoose.connection.readyState >= 1) return;

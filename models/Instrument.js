@@ -11,7 +11,7 @@ const instrumentSchema = new mongoose.Schema({
   "Switch Active SP": String,
   "PCV SP": String,
   "Calibration sheet Form": String,
-  Comment: String
+  Comment: String,
 });
 
 export default mongoose.model("Instrument", instrumentSchema);

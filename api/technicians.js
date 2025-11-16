@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Technician from "../models/Technician";
+import Technician from "/models/Technician";
 // Utility for MongoDB connection (place elsewhere if re-used)
 async function dbConnect() {
   if (mongoose.connection.readyState >= 1) return;
