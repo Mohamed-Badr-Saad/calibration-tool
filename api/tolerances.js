@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Tolerance from "/models/Tolerance";
+const Tolerance = require('../models/Tolerance')
 
 async function dbConnect() {
   if (mongoose.connection.readyState >= 1) return;

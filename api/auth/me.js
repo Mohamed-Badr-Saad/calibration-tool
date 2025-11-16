@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import User from "/models/User";
+const User = require('../../models/User')
 import mongoose from "mongoose";
 
 async function dbConnect() {

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Engineer from "/models/Engineer";
+const Engineer = require('../models/Engineer')
 
 async function dbConnect() {
   if (mongoose.connection.readyState >= 1) return;

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Instrument from "/models/Instrument";
+const Instrument = require('../models/Instrument')
 
 // Utility to connect to DB, since serverless functions require special handling
 async function dbConnect() {
