@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
-const Engineer = require('../models/Engineer')
+
+const engineerSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+});
+
+const Engineer = mongoose.model("Engineer", engineerSchema);
 
 async function dbConnect() {
   if (mongoose.connection.readyState >= 1) return;

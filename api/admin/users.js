@@ -1,8 +1,81 @@
 import mongoose from "mongoose";
-const User = require('../../models/User')
 
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 6,
+    },
+    jobTitle: {
+      type: String,
+      enum: ["technician", "engineer"],
+      required: true,
+      trim: true,
+    },
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
+    },
+    isActive: {
+      type: Boolean,
+      default: false,
+    },
+    lastLogin: {
+      type: Date,
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+// Hash password before saving
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  try {
+    const salt = await bcrypt.genSalt(12);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Compare password method
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
+
+// Remove password from JSON output
+userSchema.methods.toJSON = function () {
+  const user = this.toObject();
+  delete user.password;
+  return user;
+};
+
+const User = mongoose.model("User", userSchema);
 
 // DB connect util
 async function dbConnect() {
@@ -29,15 +102,28 @@ function isAdmin(user) {
   return user?.role === "admin";
 }
 function isSuperAdmin(user) {
-  return user?.email && user.email.toLowerCase() === (process.env.SUPER_ADMIN_EMAIL || "").toLowerCase();
+  return (
+    user?.email &&
+    user.email.toLowerCase() ===
+      (process.env.SUPER_ADMIN_EMAIL || "").toLowerCase()
+  );
 }
 
 // Permission
 function canModifyUser(currentUser, targetUser) {
   if (isSuperAdmin(currentUser)) return { allowed: true };
-  if (currentUser.role !== "admin") return { allowed: false, message: "Admin access required." };
-  if (isSuperAdmin(targetUser)) return { allowed: false, message: "Only super admin can modify super admin account." };
-  if (targetUser.role === "admin") return { allowed: false, message: "Only super admin can manage other admin accounts." };
+  if (currentUser.role !== "admin")
+    return { allowed: false, message: "Admin access required." };
+  if (isSuperAdmin(targetUser))
+    return {
+      allowed: false,
+      message: "Only super admin can modify super admin account.",
+    };
+  if (targetUser.role === "admin")
+    return {
+      allowed: false,
+      message: "Only super admin can manage other admin accounts.",
+    };
   return { allowed: true };
 }
 
@@ -54,7 +140,9 @@ export default async function handler(req, res) {
     if (!isSuperAdmin(authUser)) {
       query.email = { $ne: process.env.SUPER_ADMIN_EMAIL };
     }
-    const users = await User.find(query).select("-password").sort({ createdAt: -1 });
+    const users = await User.find(query)
+      .select("-password")
+      .sort({ createdAt: -1 });
     return res.json(users);
   }
 
@@ -69,13 +157,19 @@ export default async function handler(req, res) {
     if (!["engineer", "technician"].includes(jobTitle))
       return res.status(400).json({ message: "Invalid job title" });
     if (password.length < 6)
-      return res.status(400).json({ message: "Password must be at least 6 characters long" });
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters long" });
     if (role === "admin" && !isSuperAdmin(authUser)) {
-      return res.status(403).json({ message: "Only super admin can create admin accounts" });
+      return res
+        .status(403)
+        .json({ message: "Only super admin can create admin accounts" });
     }
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser)
-      return res.status(400).json({ message: "User already exists with this email" });
+      return res
+        .status(400)
+        .json({ message: "User already exists with this email" });
 
     const user = new User({
       email: email.toLowerCase(),
@@ -84,11 +178,15 @@ export default async function handler(req, res) {
       role,
       jobTitle,
       createdBy: authUser.id,
-      isActive: true
+      isActive: true,
     });
     await user.save();
-    const returnUser = await User.findById(user.id).select("-password").populate("createdBy", "name email");
-    return res.status(201).json({ message: "User created successfully", user: returnUser });
+    const returnUser = await User.findById(user.id)
+      .select("-password")
+      .populate("createdBy", "name email");
+    return res
+      .status(201)
+      .json({ message: "User created successfully", user: returnUser });
   }
 
   // UPDATE user by ID
@@ -98,7 +196,8 @@ export default async function handler(req, res) {
     const user = await User.findById(id);
     if (!user) return res.status(404).json({ message: "User not found" });
     const permission = canModifyUser(authUser, user);
-    if (!permission.allowed) return res.status(403).json({ message: permission.message });
+    if (!permission.allowed)
+      return res.status(403).json({ message: permission.message });
 
     if (email && email.toLowerCase() !== user.email) {
       const existingUser = await User.findOne({ email: email.toLowerCase() });
@@ -109,19 +208,29 @@ export default async function handler(req, res) {
     if (name) user.name = name.trim();
     if (role && ["admin", "user"].includes(role)) {
       if (role === "admin" && !isSuperAdmin(authUser)) {
-        return res.status(403).json({ message: "Only super admin can assign admin role" });
+        return res
+          .status(403)
+          .json({ message: "Only super admin can assign admin role" });
       }
       user.role = role;
     }
     if (password) {
       if (password.length < 6)
-        return res.status(400).json({ message: "Password must be at least 6 characters" });
+        return res
+          .status(400)
+          .json({ message: "Password must be at least 6 characters" });
       user.password = password;
     }
-    if (jobTitle && ["engineer", "technician"].includes(jobTitle)) user.jobTitle = jobTitle;
+    if (jobTitle && ["engineer", "technician"].includes(jobTitle))
+      user.jobTitle = jobTitle;
     await user.save();
-    const updatedUser = await User.findById(id).select("-password").populate("createdBy", "name email");
-    return res.json({ message: "User updated successfully", user: updatedUser });
+    const updatedUser = await User.findById(id)
+      .select("-password")
+      .populate("createdBy", "name email");
+    return res.json({
+      message: "User updated successfully",
+      user: updatedUser,
+    });
   }
 
   // PATCH user status (activate/deactivate)
@@ -131,10 +240,14 @@ export default async function handler(req, res) {
     const user = await User.findById(id);
     if (!user) return res.status(404).json({ message: "User not found" });
     const permission = canModifyUser(authUser, user);
-    if (!permission.allowed) return res.status(403).json({ message: permission.message });
+    if (!permission.allowed)
+      return res.status(403).json({ message: permission.message });
     user.isActive = !!isActive;
     await user.save();
-    return res.json({ message: `User ${isActive ? "activated" : "deactivated"} successfully`, user });
+    return res.json({
+      message: `User ${isActive ? "activated" : "deactivated"} successfully`,
+      user,
+    });
   }
 
   // DELETE user
@@ -143,7 +256,8 @@ export default async function handler(req, res) {
     const user = await User.findById(id);
     if (!user) return res.status(404).json({ message: "User not found" });
     const permission = canModifyUser(authUser, user);
-    if (!permission.allowed) return res.status(403).json({ message: permission.message });
+    if (!permission.allowed)
+      return res.status(403).json({ message: permission.message });
     await User.findByIdAndDelete(id);
     return res.json({ message: "User deleted successfully" });
   }

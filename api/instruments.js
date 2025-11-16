@@ -1,5 +1,20 @@
 import mongoose from "mongoose";
-const Instrument = require('../models/Instrument')
+
+const instrumentSchema = new mongoose.Schema({
+  "Upper Equipment": String,
+  Tag: String,
+  LRV: Number,
+  URV: String,
+  Unit: String,
+  "Valve Size": Number,
+  "Switch Healthy SP": String,
+  "Switch Active SP": String,
+  "PCV SP": String,
+  "Calibration sheet Form": String,
+  Comment: String,
+});
+
+const Instrument = mongoose.model("Instrument", instrumentSchema);
 
 // Utility to connect to DB, since serverless functions require special handling
 async function dbConnect() {

@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
-const Technician = require("../models/Technician");
+const technicianSchema = new mongoose.Schema({
+  name: { type: String, required: true }
+});
+
+const Technician = mongoose.model("Technician", technicianSchema);
 
 // Utility for MongoDB connection (place elsewhere if re-used)
 async function dbConnect() {
@@ -35,9 +39,11 @@ export default async function handler(req, res) {
   if (req.method === "PUT") {
     const { id } = req.query;
     try {
-      const updatedTech = await Technician.findByIdAndUpdate(id, req.body, {
-        new: true,
-      });
+      const updatedTech = await Technician.findByIdAndUpdate(
+        id,
+        req.body,
+        { new: true }
+      );
       if (!updatedTech) {
         return res.status(404).json({ message: "Technician not found" });
       }
