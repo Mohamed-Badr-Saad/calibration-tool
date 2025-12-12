@@ -1215,6 +1215,13 @@ export default function InstrumentTable() {
       ) : (
         <Card>
           <CardContent className="p-0">
+            {hasSearched && filtered.length === 0 && (
+              <div className="text-center py-16 border rounded-2xl p-4 mt-8">
+                <div className="text-gray-500 max-w-md mx-auto">
+                  No instruments found. Adjust your filters or fetch all.
+                </div>
+              </div>
+            )}
             {!hasSearched ? (
               <div className="text-center py-16">
                 <div className="mb-6">
