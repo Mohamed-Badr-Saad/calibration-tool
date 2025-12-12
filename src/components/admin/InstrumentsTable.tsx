@@ -415,39 +415,65 @@ export default function InstrumentTable() {
     removeInstrument(id);
   };
 
-  const filtered = !hasSearched
-    ? []
-    : instruments?.filter((inst) => {
-        const { tag, upperEquipment, instrumentType } = appliedFilters;
+  // const filtered = !hasSearched
+  //   ? []
+  //   : instruments?.filter((inst) => {
+  //       const { tag, upperEquipment, instrumentType } = appliedFilters;
 
-        if (!tag && !upperEquipment && !instrumentType) {
-          return true;
-        }
+  //       if (!tag && !upperEquipment && !instrumentType) {
+  //         return true;
+  //       }
 
-        if (tag && !inst.Tag.toLowerCase().includes(tag.toLowerCase())) {
-          return false;
-        }
+  //       if (tag && !inst.Tag.toLowerCase().includes(tag.toLowerCase())) {
+  //         return false;
+  //       }
 
-        if (
-          upperEquipment &&
-          !inst["Upper Equipment"]
-            .toLowerCase()
-            .includes(upperEquipment.toLowerCase())
-        ) {
-          return false;
-        }
+  //       if (
+  //         upperEquipment &&
+  //         !inst["Upper Equipment"]
+  //           .toLowerCase()
+  //           .includes(upperEquipment.toLowerCase())
+  //       ) {
+  //         return false;
+  //       }
 
-        if (
-          instrumentType &&
-          instrumentType !== "all" &&
-          instrumentType !== "" &&
-          inst["Calibration sheet Form"] !== instrumentType
-        ) {
-          return false;
-        }
+  //       if (
+  //         instrumentType &&
+  //         instrumentType !== "all" &&
+  //         instrumentType !== "" &&
+  //         inst["Calibration sheet Form"] !== instrumentType
+  //       ) {
+  //         return false;
+  //       }
 
-        return true;
-      }) || [];
+  //       return true;
+  //     }) || [];
+
+  const filtered = useMemo(() => {
+    const safeArray = Array.isArray(instruments) ? instruments : [];
+
+    if (!hasSearched) return [];
+    return safeArray.filter((inst) => {
+      const { tag, upperEquipment, instrumentType } = appliedFilters;
+      if (tag && !inst.Tag?.toLowerCase().includes(tag.toLowerCase()))
+        return false;
+      if (
+        upperEquipment &&
+        !inst["Upper Equipment"]
+          ?.toLowerCase()
+          .includes(upperEquipment.toLowerCase())
+      )
+        return false;
+      if (
+        instrumentType &&
+        instrumentType !== "all" &&
+        instrumentType !== "" &&
+        inst["Calibration sheet Form"] !== instrumentType
+      )
+        return false;
+      return true;
+    });
+  }, [instruments, appliedFilters, hasSearched]);
 
   const clearTagFilter = () => {
     const newFilters = { ...appliedFilters, tag: "" };

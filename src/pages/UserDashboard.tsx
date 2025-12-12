@@ -93,6 +93,7 @@ export default function UserDashboard() {
     setAppliedFilters(newFilters);
     setFilters(newFilters);
   };
+  
   const hasInputChanges =
     filters.tag || filters.upperEquipment || filters.instrumentType;
   const hasActiveFilters =
