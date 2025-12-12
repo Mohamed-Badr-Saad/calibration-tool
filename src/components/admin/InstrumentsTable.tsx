@@ -1251,7 +1251,8 @@ export default function InstrumentTable() {
                   </Button>
                 </div>
               </div>
-            ) : (
+            ) : filtered.length>0 && (
+              
               <div className="p-4">
                 <div
                   className={`grid ${
