@@ -1277,7 +1277,7 @@ export default function InstrumentTable() {
                     }}
                   >
                     {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                      const inst = safeArray[virtualRow.index];
+                      const inst = filtered[virtualRow.index];
                       return (
                         <div
                           key={inst._id}
