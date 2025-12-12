@@ -7,9 +7,9 @@ import type {
 
 // export const API_URL = "http://localhost:5000/api"; //local api url
 
-// export const API_URL = "https://calibration-tool-server.vercel.app/api"; //vercel api url
+export const API_URL = "https://calibration-tool-server.vercel.app/api"; //vercel api url
 
-export const API_URL = "/api";  // Calls to the same deployment where frontend lives (serverless vercel feature) (not working properly)
+// export const API_URL = "/api";  // Calls to the same deployment where frontend lives (serverless vercel feature) (not working properly) (delete/put/patch requests don't work)
 
 // export const API_URL = "https://calibrationtoolserver-z742josl.b4a.run/api";  // back4app api url
 
