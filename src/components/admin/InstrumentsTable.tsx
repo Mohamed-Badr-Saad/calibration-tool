@@ -415,45 +415,13 @@ export default function InstrumentTable() {
     removeInstrument(id);
   };
 
-  // const filtered = !hasSearched
-  //   ? []
-  //   : instruments?.filter((inst) => {
-  //       const { tag, upperEquipment, instrumentType } = appliedFilters;
-
-  //       if (!tag && !upperEquipment && !instrumentType) {
-  //         return true;
-  //       }
-
-  //       if (tag && !inst.Tag.toLowerCase().includes(tag.toLowerCase())) {
-  //         return false;
-  //       }
-
-  //       if (
-  //         upperEquipment &&
-  //         !inst["Upper Equipment"]
-  //           .toLowerCase()
-  //           .includes(upperEquipment.toLowerCase())
-  //       ) {
-  //         return false;
-  //       }
-
-  //       if (
-  //         instrumentType &&
-  //         instrumentType !== "all" &&
-  //         instrumentType !== "" &&
-  //         inst["Calibration sheet Form"] !== instrumentType
-  //       ) {
-  //         return false;
-  //       }
-
-  //       return true;
-  //     }) || [];
-
   const filtered = useMemo(() => {
     const safeArray = Array.isArray(instruments) ? instruments : [];
 
-    if (!hasSearched) return [];
+    if (!hasSearched) return safeArray;
     return safeArray.filter((inst) => {
+      // Skip null/undefined instruments
+      if (!inst) return false;
       const { tag, upperEquipment, instrumentType } = appliedFilters;
       if (tag && !inst.Tag?.toLowerCase().includes(tag.toLowerCase()))
         return false;
@@ -1251,116 +1219,119 @@ export default function InstrumentTable() {
                   </Button>
                 </div>
               </div>
-            ) : filtered.length>0 && (
-              
-              <div className="p-4">
-                <div
-                  className={`grid ${
-                    showAll ? "grid-cols-10" : "grid-cols-5"
-                  } font-semibold bg-gray-50 py-2 `}
-                >
-                  <div>Tag</div>
-                  <div>Type</div>
-                  <div>Upper Equipment</div>
-                  {showAll && (
-                    <>
-                      <div>Range</div>
-                      <div>Unit</div>
-                      <div>Valve Size</div>
-                      <div>Switch SP</div>
-                      <div>PCV SP</div>
-                    </>
-                  )}
-                  <div>Comment</div>
-                  <div className="flex justify-end mr-10">Actions</div>
-                </div>
-                <div
-                  ref={parentRef}
-                  style={{ height, overflow: "auto", position: "relative" }}
-                >
+            ) : (
+              filtered.length > 0 && (
+                <div className="p-4">
                   <div
-                    style={{
-                      height: `${rowVirtualizer.getTotalSize()}px`,
-                      position: "relative",
-                    }}
+                    className={`grid ${
+                      showAll ? "grid-cols-10" : "grid-cols-5"
+                    } font-semibold bg-gray-50 py-2 `}
                   >
-                    {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                      const inst = filtered[virtualRow.index];
-                      return (
-                        <div
-                          key={inst._id}
-                          className={`grid items-center border-b ${
-                            showAll ? "grid-cols-10" : "grid-cols-5"
-                          }`}
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            width: "100%",
-                            transform: `translateY(${virtualRow.start}px)`,
-                            minHeight: rowHeight,
-                          }}
-                        >
-                          <div className="font-medium">{inst.Tag}</div>
-                          <div>
-                            <span
-                              className={`${getBadgeColor(
-                                inst["Calibration sheet Form"]
-                              )} w-fit rounded-[5px] px-2 py-1 text-xs font-semibold`}
-                            >
-                              {inst["Calibration sheet Form"]}
-                            </span>
+                    <div>Tag</div>
+                    <div>Type</div>
+                    <div>Upper Equipment</div>
+                    {showAll && (
+                      <>
+                        <div>Range</div>
+                        <div>Unit</div>
+                        <div>Valve Size</div>
+                        <div>Switch SP</div>
+                        <div>PCV SP</div>
+                      </>
+                    )}
+                    <div>Comment</div>
+                    <div className="flex justify-end mr-10">Actions</div>
+                  </div>
+                  <div
+                    ref={parentRef}
+                    style={{ height, overflow: "auto", position: "relative" }}
+                  >
+                    <div
+                      style={{
+                        height: `${rowVirtualizer.getTotalSize()}px`,
+                        position: "relative",
+                      }}
+                    >
+                      {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                        const inst = filtered[virtualRow.index];
+                        // Skip if instrument is undefined/null
+                        if (!inst) return null;
+                        return (
+                          <div
+                            key={inst._id}
+                            className={`grid items-center border-b ${
+                              showAll ? "grid-cols-10" : "grid-cols-5"
+                            }`}
+                            style={{
+                              position: "absolute",
+                              top: 0,
+                              left: 0,
+                              width: "100%",
+                              transform: `translateY(${virtualRow.start}px)`,
+                              minHeight: rowHeight,
+                            }}
+                          >
+                            <div className="font-medium">{inst.Tag}</div>
+                            <div>
+                              <span
+                                className={`${getBadgeColor(
+                                  inst["Calibration sheet Form"]
+                                )} w-fit rounded-[5px] px-2 py-1 text-xs font-semibold`}
+                              >
+                                {inst["Calibration sheet Form"]}
+                              </span>
+                            </div>
+                            <div>{inst["Upper Equipment"]}</div>
+                            {showAll && (
+                              <>
+                                <div>
+                                  {inst.LRV !== undefined &&
+                                  inst.URV !== undefined
+                                    ? `${inst.LRV} - ${inst.URV}`
+                                    : "N/A"}
+                                </div>
+                                <div>{inst.Unit || "N/A"}</div>
+                                <div>
+                                  {inst["Valve Size"] !== undefined
+                                    ? `${inst["Valve Size"]}"`
+                                    : "N/A"}
+                                </div>
+                                <div>
+                                  {inst["Switch Healthy SP"] !== undefined &&
+                                  inst["Switch Active SP"] !== undefined
+                                    ? `H:${inst["Switch Healthy SP"]} / A:${inst["Switch Active SP"]}`
+                                    : "N/A"}
+                                </div>
+                                <div>{inst["PCV SP"] || "N/A"}</div>
+                              </>
+                            )}
+                            <div>{inst.Comment}</div>
+                            <div className="flex justify-end gap-2 mr-5">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleEditClick(inst)}
+                                className="h-8 w-8 p-0"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleDelete(inst._id!)}
+                                className="h-8 w-8 p-0"
+                                style={{ color: "red" }}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </div>
-                          <div>{inst["Upper Equipment"]}</div>
-                          {showAll && (
-                            <>
-                              <div>
-                                {inst.LRV !== undefined &&
-                                inst.URV !== undefined
-                                  ? `${inst.LRV} - ${inst.URV}`
-                                  : "N/A"}
-                              </div>
-                              <div>{inst.Unit || "N/A"}</div>
-                              <div>
-                                {inst["Valve Size"] !== undefined
-                                  ? `${inst["Valve Size"]}"`
-                                  : "N/A"}
-                              </div>
-                              <div>
-                                {inst["Switch Healthy SP"] !== undefined &&
-                                inst["Switch Active SP"] !== undefined
-                                  ? `H:${inst["Switch Healthy SP"]} / A:${inst["Switch Active SP"]}`
-                                  : "N/A"}
-                              </div>
-                              <div>{inst["PCV SP"] || "N/A"}</div>
-                            </>
-                          )}
-                          <div>{inst.Comment}</div>
-                          <div className="flex justify-end gap-2 mr-5">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleEditClick(inst)}
-                              className="h-8 w-8 p-0"
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleDelete(inst._id!)}
-                              className="h-8 w-8 p-0"
-                              style={{ color: "red" }}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )
             )}
           </CardContent>
         </Card>
