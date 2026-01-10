@@ -110,7 +110,7 @@ export default function AuthPage() {
             <p className="text-center text-gray-600">
               {isLogin
                 ? "Sign in to your account to continue"
-                : "Join RASHPETCO's instrument management platform"}
+                : "Join RASHPETCO's instrument management platform\n (you should call the admin to activate your account) "}
             </p>
           </CardHeader>
 
