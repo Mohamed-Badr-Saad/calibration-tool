@@ -96,7 +96,7 @@ export default function PCVPage({
                 onChange={(e) => handleFieldChange("size", e.target.value)}
                 className="rounded-r-none"
               />
-              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-[#f4f7fb] text-gray-500 text-sm">
                 Inch
               </span>
             </div>

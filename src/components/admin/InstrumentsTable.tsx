@@ -96,12 +96,12 @@ const FIELD_CONFIG: Record<
 };
 
 const BADGE_COLORS = {
-  Transmitter: "bg-blue-100 text-blue-800",
-  Gauge: "bg-green-100 text-green-800",
-  "Control Valve": "bg-purple-100 text-purple-800",
-  "On-Off Valve": "bg-orange-100 text-orange-800",
-  Switch: "bg-red-100 text-red-800",
-  PCV: "bg-yellow-100 text-yellow-800",
+  Transmitter: "bg-[#d8e8ff] text-blue-800",
+  Gauge: "bg-[#d9f3e4] text-green-800",
+  "Control Valve": "bg-[#eadcf8] text-purple-800",
+  "On-Off Valve": "bg-[#ffe4cc] text-orange-800",
+  Switch: "bg-[#f9d3d3] text-red-800",
+  PCV: "bg-[#fff2b8] text-yellow-800",
 } as const;
 
 // Updated interface to allow "N/A" for number fields
@@ -473,7 +473,7 @@ export default function InstrumentTable() {
   const getBadgeColor = (formType: string) => {
     return (
       BADGE_COLORS[formType as keyof typeof BADGE_COLORS] ||
-      "bg-gray-100 text-gray-800"
+      "bg-[#eef2f7] text-gray-800"
     );
   };
 
@@ -557,7 +557,7 @@ export default function InstrumentTable() {
                         Add Instrument
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-amber-50 ">
+                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-[#f8f3e7] ">
                       <DialogHeader>
                         <DialogTitle className="text-xl">
                           {editing ? "Edit Instrument" : "Add New Instrument"}
@@ -591,23 +591,23 @@ export default function InstrumentTable() {
                               >
                                 <SelectTrigger
                                   style={{
-                                    backgroundColor: "#fffbe8",
+                                    backgroundColor: "#f8f3e7",
                                     border: "1px solid blue",
                                     boxShadow: "0 1px 3px rgba(0,0,2,1)",
                                   }}
-                                  className="!bg-[#fffbe8] !border-[#d1d5db] !text-gray-900"
+                                  className="!bg-[#f8f3e7] !border-[#d1d5db] !text-gray-900"
                                   id="calibration-form"
                                 >
                                   <SelectValue placeholder="Select calibration sheet form" />
                                 </SelectTrigger>
                                 <SelectContent
-                                  style={{ backgroundColor: "#fffbe8" }}
+                                  style={{ backgroundColor: "#f8f3e7" }}
                                 >
                                   {CALIBRATION_FORMS.map((formType) => (
                                     <SelectItem
                                       key={formType}
                                       value={formType}
-                                      className="border-b border-gray-300 hover:bg-blue-50"
+                                      className="border-b border-gray-300 hover:bg-[#e8f1ff]"
                                     >
                                       {formType}
                                     </SelectItem>
@@ -667,7 +667,7 @@ export default function InstrumentTable() {
                                     filteredSuggestions.length > 0 && (
                                       <ul
                                         style={{
-                                          backgroundColor: "#fffbe8",
+                                          backgroundColor: "#f8f3e7",
                                           maxHeight: "12rem", // Example: 12rem = 192px, adjust as needed
                                           overflowY: "auto",
                                         }}
@@ -677,7 +677,7 @@ export default function InstrumentTable() {
                                           (suggestion) => (
                                             <li
                                               key={suggestion}
-                                              className="cursor-pointer hover:bg-blue-50 px-4 py-2"
+                                              className="cursor-pointer hover:bg-[#e8f1ff] px-4 py-2"
                                               onMouseDown={() => {
                                                 setUpperEquipment(suggestion);
                                                 setShowSuggestions(false);
@@ -955,7 +955,7 @@ export default function InstrumentTable() {
 
             {/* Search Panel */}
             {showAdvancedSearch && (
-              <Card className="border-2 border-blue-200 bg-blue-50/50">
+              <Card className="border-2 border-blue-200 bg-[#e8f1ff]/60">
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-center">
                     <CardTitle className="text-lg text-blue-700 flex items-center gap-2">
@@ -1044,19 +1044,19 @@ export default function InstrumentTable() {
                         >
                           <SelectTrigger
                             id="search-type"
-                            className=" bg-blue-800 shadow-stone-500"
+                            className=" bg-[#173b6c] shadow-stone-500"
                           >
                             <SelectValue placeholder="All  types" />
                           </SelectTrigger>
                           <SelectContent
-                            style={{ background: "rgb(239 246 255)" }}
+                            style={{ background: "#e8f1ff" }}
                           >
                             <SelectItem value="all">All Types</SelectItem>
                             {CALIBRATION_FORMS.map((formType) => (
                               <SelectItem
                                 key={formType}
                                 value={formType}
-                                className="border-b border-gray-300 hover:bg-gray-300"
+                                className="border-b border-gray-300 hover:bg-[#dbe3ee]"
                               >
                                 {formType}
                               </SelectItem>
@@ -1130,7 +1130,7 @@ export default function InstrumentTable() {
                             Tag: {appliedFilters.tag}
                             <button
                               onClick={clearTagFilter}
-                              className="h-3 w-3 rounded-full hover:bg-red-100 flex items-center justify-center"
+                              className="h-3 w-3 rounded-full hover:bg-[#f9d3d3] flex items-center justify-center"
                             >
                               <X className="h-2 w-2 text-red-600" />
                             </button>
@@ -1144,7 +1144,7 @@ export default function InstrumentTable() {
                             Equipment: {appliedFilters.upperEquipment}
                             <button
                               onClick={clearEquipmentFilter}
-                              className="h-3 w-3 rounded-full hover:bg-red-100 flex items-center justify-center"
+                              className="h-3 w-3 rounded-full hover:bg-[#f9d3d3] flex items-center justify-center"
                             >
                               <X className="h-2 w-2 text-red-600" />
                             </button>
@@ -1158,7 +1158,7 @@ export default function InstrumentTable() {
                             Type: {appliedFilters.instrumentType}
                             <button
                               onClick={clearTypeFilter}
-                              className="h-3 w-3 rounded-full hover:bg-red-100 flex items-center justify-center"
+                              className="h-3 w-3 rounded-full hover:bg-[#f9d3d3] flex items-center justify-center"
                             >
                               <X className="h-2 w-2 text-red-600" />
                             </button>
@@ -1225,7 +1225,7 @@ export default function InstrumentTable() {
                   <div
                     className={`grid ${
                       showAll ? "grid-cols-10" : "grid-cols-5"
-                    } font-semibold bg-gray-50 py-2 `}
+                    } font-semibold bg-[#f4f7fb] py-2 `}
                   >
                     <div>Tag</div>
                     <div>Type</div>

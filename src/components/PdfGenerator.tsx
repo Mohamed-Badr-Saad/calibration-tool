@@ -880,7 +880,7 @@ export function PdfDownloadButton({
                 <Button
                   onClick={() => setHasDownloaded(true)}
                   style={{
-                    backgroundColor: "#16a34a", // Tailwind green-600
+                    backgroundColor: "#16804a", // Tailwind green-600
                     color: "#fff",
                     fontWeight: 600,
                     padding: "0.5rem 1rem",
@@ -892,10 +892,10 @@ export function PdfDownloadButton({
                     marginLeft: "1rem",
                   }}
                   onMouseEnter={(e) =>
-                    (e.currentTarget.style.backgroundColor = "#15803d")
+                    (e.currentTarget.style.backgroundColor = "#126b3d")
                   } // hover green-700
                   onMouseLeave={(e) =>
-                    (e.currentTarget.style.backgroundColor = "#16a34a")
+                    (e.currentTarget.style.backgroundColor = "#16804a")
                   }
                 >
                   Export All Calibration Sheets
@@ -907,7 +907,7 @@ export function PdfDownloadButton({
         <Button
           style={{
             marginTop: "1rem",
-            backgroundColor: "#28a745",
+            backgroundColor: "#16804a",
             color: "#fff",
             fontWeight: "600",
             padding: "0.5rem 1rem",

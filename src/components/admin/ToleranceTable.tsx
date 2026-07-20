@@ -184,7 +184,7 @@ export default function ToleranceTable() {
                 }
                 className="rounded-r-none"
               />
-              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-[#f4f7fb] text-gray-500 text-sm">
                 {localTolerances.unit}
               </span>
             </div>
@@ -205,7 +205,7 @@ export default function ToleranceTable() {
                 }
                 className="rounded-r-none"
               />
-              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-[#f4f7fb] text-gray-500 text-sm">
                 {localTolerances.unit}
               </span>
             </div>
@@ -228,7 +228,7 @@ export default function ToleranceTable() {
                 }
                 className="rounded-r-none"
               />
-              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-[#f4f7fb] text-gray-500 text-sm">
                 {localTolerances.unit}
               </span>
             </div>
@@ -251,7 +251,7 @@ export default function ToleranceTable() {
                 }
                 className="rounded-r-none"
               />
-              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-[#f4f7fb] text-gray-500 text-sm">
                 {localTolerances.unit}
               </span>
             </div>
@@ -277,7 +277,7 @@ export default function ToleranceTable() {
                 }
                 className="rounded-r-none"
               />
-              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-[#f4f7fb] text-gray-500 text-sm">
                 {localTolerances.unit}
               </span>
             </div>
@@ -298,7 +298,7 @@ export default function ToleranceTable() {
                 }
                 className="rounded-r-none"
               />
-              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-[#f4f7fb] text-gray-500 text-sm">
                 {localTolerances.unit}
               </span>
             </div>
@@ -364,7 +364,7 @@ export default function ToleranceTable() {
         </div>
 
         {/* Info Section */}
-        <div className="bg-blue-50 p-4 rounded-lg mt-6">
+        <div className="bg-[#e8f1ff] p-4 rounded-lg mt-6">
           <h4 className="font-medium text-blue-900 mb-2">
             About Tolerance Settings
           </h4>

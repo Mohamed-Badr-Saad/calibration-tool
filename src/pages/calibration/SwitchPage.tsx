@@ -132,7 +132,7 @@ export default function SwitchPage({
           <div className="font-semibold mb-2">Test Results</div>
           <table className="w-full table-fixed border border-gray-300">
             <thead>
-              <tr className="bg-gray-100">
+              <tr className="bg-[#eef2f7]">
                 <th className="border border-gray-300 p-2 w-32 font-semibold">
                   Status
                 </th>
@@ -149,7 +149,7 @@ export default function SwitchPage({
             </thead>
             <tbody>
               <tr>
-                <td className="border border-gray-300 p-2 font-semibold bg-gray-50">
+                <td className="border border-gray-300 p-2 font-semibold bg-[#f4f7fb]">
                   Test Result
                 </td>
                 <td className="border border-gray-300 p-1">
@@ -199,7 +199,7 @@ export default function SwitchPage({
                 <td className="border border-gray-300 p-2 text-center">{formData.unit}</td>
               </tr>
               <tr>
-                <td className="border border-gray-300 p-2 font-semibold bg-gray-50">
+                <td className="border border-gray-300 p-2 font-semibold bg-[#f4f7fb]">
                   Set Point
                 </td>
                 <td className="border border-gray-300 p-1">

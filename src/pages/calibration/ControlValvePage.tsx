@@ -155,7 +155,7 @@ export default function ControlValvePage({
                 onChange={(e) => handleFieldChange("size", e.target.value)}
                 className="rounded-r-none"
               />
-              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-[#f4f7fb] text-gray-500 text-sm">
                 Inch
               </span>
             </div>
@@ -190,7 +190,7 @@ export default function ControlValvePage({
           <div className="font-semibold mb-2">Test Results</div>
           <table className="w-full table-fixed border border-gray-300">
             <thead>
-              <tr className="bg-gray-100">
+              <tr className="bg-[#eef2f7]">
                 <th className="border border-gray-300 p-1 w-28" colSpan={2}>
                   Upscale
                 </th>
@@ -199,7 +199,7 @@ export default function ControlValvePage({
                 </th>
                 <th className="border border-gray-300 p-1 w-24">Unit</th>
               </tr>
-              <tr className="bg-gray-100">
+              <tr className="bg-[#eef2f7]">
                 <th className="border border-gray-300 p-1 font-semibold">
                   Applied Value
                 </th>

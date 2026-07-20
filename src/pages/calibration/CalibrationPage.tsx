@@ -314,23 +314,23 @@ export default function CalibrationPage() {
             >
               <SelectTrigger
                 style={{
-                  // backgroundColor: "#fffbe8",
+                  // backgroundColor: "#f8f3e7",
                   border: "1px solid blue",
                   boxShadow: "0 1px 3px rgba(0,0,2,1)",
                 }}
-                className="bg-gray-200 !border-[#d1d5db] !text-gray-900 "
+                className="bg-[#dbe3ee] !border-[#d1d5db] !text-gray-900 "
               >
                 <SelectValue placeholder="Created By" />
               </SelectTrigger>
               <SelectContent
-                className="max-h-48 overflow-y-auto bg-gray-100"
-                // style={{ backgroundColor: "#fffbe8" }}
+                className="max-h-48 overflow-y-auto bg-[#eef2f7]"
+                // style={{ backgroundColor: "#f8f3e7" }}
               >
                 {technicians.map((tech) => (
                   <SelectItem
                     key={tech._id}
                     value={tech.name}
-                    className="border-b border-gray-200 hover:bg-gray-300"
+                    className="border-b border-gray-200 hover:bg-[#dbe3ee]"
                   >
                     {tech.name}
                   </SelectItem>
@@ -367,7 +367,7 @@ export default function CalibrationPage() {
               <Button
                 onClick={handleExport}
                 style={{
-                  backgroundColor: "#2563eb", // Tailwind blue-600
+                  backgroundColor: "#2463a6", // Tailwind blue-600
                   color: "#fff",
                   fontWeight: 600,
                   padding: "0.5rem 1rem",
@@ -378,10 +378,10 @@ export default function CalibrationPage() {
                   border: "none",
                 }}
                 onMouseEnter={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#1d4ed8")
+                  (e.currentTarget.style.backgroundColor = "#1f4f86")
                 } // hover blue-700
                 onMouseLeave={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#2563eb")
+                  (e.currentTarget.style.backgroundColor = "#2463a6")
                 }
               >
                 Prepare All Calibration Sheets

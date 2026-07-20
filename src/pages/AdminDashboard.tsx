@@ -28,7 +28,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#f4f7fb]">
       {/* Header */}
       {/* <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,7 +48,7 @@ export default function AdminDashboard() {
                 <span className="text-sm font-medium text-gray-700">
                   {user?.name}
                 </span>
-                <Badge className="bg-red-100 text-red-800">Admin</Badge>
+                <Badge className="bg-[#f9d3d3] text-red-800">Admin</Badge>
               </div>
               <Button variant="outline" size="sm" onClick={handleLogout}>
                 <LogOut className="h-4 w-4 mr-2" />

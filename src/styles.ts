@@ -1,4 +1,4 @@
 export const ButtonStyles = {
-  primary: "bg-gray-500 text-white hover:bg-gray-600 border border-gray-500",
-  secondary: "bg-blue-500 text-white hover:bg-blue-600",
+  primary: "bg-[#2463a6] text-white hover:bg-[#1f4f86] border border-[#2463a6]",
+  secondary: "bg-[#16804a] text-white hover:bg-[#126b3d]",
 };

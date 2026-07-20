@@ -77,7 +77,7 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen w-screen bg-[#f4f7fb] flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6">
         {/* Company Header */}
         <div className="text-center space-y-2">
@@ -173,7 +173,7 @@ export default function AuthPage() {
                   />
                 </div>
                 {formData.email === "Mohamed.Ali@RASHPETCO.com" && (
-                  <Badge className="bg-amber-100 text-amber-800">
+                  <Badge className="bg-[#fff2b8] text-amber-800">
                     Super Admin Account
                   </Badge>
                 )}
@@ -202,7 +202,7 @@ export default function AuthPage() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 h-4 w-4 text-gray-400 hover:text-gray-600"
-                    style={{ backgroundColor: "#eaf1ff" }}
+                    style={{ backgroundColor: "#e8f1ff" }}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -239,7 +239,7 @@ export default function AuthPage() {
                 type="button"
                 onClick={toggleMode}
                 className="font-medium text-blue-600 hover:text-blue-500"
-                style={{ backgroundColor: "#eaf1ff" }}
+                style={{ backgroundColor: "#e8f1ff" }}
                 disabled={isLoading}
               >
                 {isLogin ? "Sign up" : "Sign in"}

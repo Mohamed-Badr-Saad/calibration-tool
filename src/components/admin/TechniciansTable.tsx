@@ -80,7 +80,7 @@ export default function TechnicianTable() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-green-100 rounded-lg">
+              <div className="p-2 bg-[#d9f3e4] rounded-lg">
                 <Wrench className="h-6 w-6 text-green-600" />
               </div>
               <div>
@@ -134,7 +134,7 @@ export default function TechnicianTable() {
                     Add Technician
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-md bg-amber-50">
+                <DialogContent className="sm:max-w-md bg-[#f8f3e7]">
                   <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-xl">
                       <Wrench className="h-5 w-5 text-green-600" />
@@ -223,7 +223,7 @@ export default function TechnicianTable() {
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-gray-50 border-b">
+                    <thead className="bg-[#f4f7fb] border-b">
                       <tr>
                         <th className="text-left p-4 font-medium text-gray-700">
                           Technician Name
@@ -240,11 +240,11 @@ export default function TechnicianTable() {
                       {filtered.map((technician) => (
                         <tr
                           key={technician._id}
-                          className="hover:bg-gray-50 transition-colors"
+                          className="hover:bg-[#f4f7fb] transition-colors"
                         >
                           <td className="p-4">
                             <div className="flex items-center space-x-3">
-                              <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                              <div className="flex-shrink-0 w-8 h-8 bg-[#d9f3e4] rounded-full flex items-center justify-center">
                                 <span className="text-green-600 font-medium text-sm">
                                   {technician.name.charAt(0).toUpperCase()}
                                 </span>
@@ -262,7 +262,7 @@ export default function TechnicianTable() {
                           <td className="p-4">
                             <Badge
                               variant="secondary"
-                              className="bg-green-100 text-green-800"
+                              className="bg-[#d9f3e4] text-green-800"
                             >
                               Technician
                             </Badge>

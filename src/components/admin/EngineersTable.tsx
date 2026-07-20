@@ -73,7 +73,7 @@ export default function EngineerTable() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
+              <div className="p-2 bg-[#d8e8ff] rounded-lg">
                 <Users className="h-6 w-6 text-blue-600" />
               </div>
               <div>
@@ -125,7 +125,7 @@ export default function EngineerTable() {
                     Add Engineer
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-md bg-amber-50">
+                <DialogContent className="sm:max-w-md bg-[#f8f3e7]">
                   <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-xl">
                       <Users className="h-5 w-5 text-blue-600" />
@@ -214,7 +214,7 @@ export default function EngineerTable() {
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-gray-50 border-b">
+                    <thead className="bg-[#f4f7fb] border-b">
                       <tr>
                         <th className="text-left p-4 font-medium text-gray-700">
                           Engineer Name
@@ -231,11 +231,11 @@ export default function EngineerTable() {
                       {filtered.map((engineer) => (
                         <tr
                           key={engineer._id}
-                          className="hover:bg-gray-50 transition-colors"
+                          className="hover:bg-[#f4f7fb] transition-colors"
                         >
                           <td className="p-4">
                             <div className="flex items-center space-x-3">
-                              <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                              <div className="flex-shrink-0 w-8 h-8 bg-[#d8e8ff] rounded-full flex items-center justify-center">
                                 <span className="text-blue-600 font-medium text-sm">
                                   {engineer.name.charAt(0).toUpperCase()}
                                 </span>
@@ -253,7 +253,7 @@ export default function EngineerTable() {
                           <td className="p-4">
                             <Badge
                               variant="secondary"
-                              className="bg-blue-100 text-blue-800"
+                              className="bg-[#d8e8ff] text-blue-800"
                             >
                               Engineer
                             </Badge>

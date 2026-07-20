@@ -89,7 +89,7 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 w-screen">
+    <div className="min-h-screen bg-[#f4f7fb] w-screen">
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -105,7 +105,7 @@ export default function AdminLayout() {
                 />
               </div>
               <span className="text-lg font-bold text-gray-900">RASHPETCO</span>
-              <span className="text-xs rounded bg-blue-100 text-blue-700 px-2 ml-2">
+              <span className="text-xs rounded bg-[#d8e8ff] text-blue-700 px-2 ml-2">
                 Admin Portal
               </span>
             </div>
@@ -120,10 +120,10 @@ export default function AdminLayout() {
                   <p className="text-xs text-gray-500">{user?.email}</p>
                 </div>
                 <div className="flex flex-col items-center space-y-1">
-                  <Shield className="h-8 w-8 text-blue-600 bg-blue-100 rounded-full p-1" />
+                  <Shield className="h-8 w-8 text-blue-600 bg-[#d8e8ff] rounded-full p-1" />
                   <Badge
                     variant="secondary"
-                    className="text-xs bg-blue-100 text-blue-800"
+                    className="text-xs bg-[#d8e8ff] text-blue-800"
                   >
                     {user?.role}
                   </Badge>
@@ -134,7 +134,7 @@ export default function AdminLayout() {
                 variant="ghost"
                 size="sm"
                 onClick={handleLogout}
-                className="text-gray-600 hover:text-red-600 hover:bg-red-50"
+                className="text-gray-600 hover:text-red-600 hover:bg-[#fff0f0]"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 Logout
@@ -154,7 +154,7 @@ export default function AdminLayout() {
                 onClick={() => navigate(item.path)}
                 className={`px-3 py-4 text-sm font-medium transition-colors  flex items-center space-x-2 border-b-2 ${
                   isActive(item.path)
-                    ? "text-blue-600 border-blue-600 bg-blue-50"
+                    ? "text-blue-600 border-blue-600 bg-[#e8f1ff]"
                     : "text-gray-600 hover:text-blue-600 border-transparent hover:border-blue-600"
                 }`}
               >

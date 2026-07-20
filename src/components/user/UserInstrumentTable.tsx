@@ -5,17 +5,17 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import React from "react";
 
 const BADGE_COLORS = {
-  Transmitter: "bg-blue-100 text-blue-800",
-  Gauge: "bg-green-100 text-green-800",
-  "Control Valve": "bg-purple-100 text-purple-800",
-  "On-Off Valve": "bg-orange-100 text-orange-800",
-  Switch: "bg-red-100 text-red-800",
-  PCV: "bg-yellow-100 text-yellow-800",
+  Transmitter: "bg-[#d8e8ff] text-blue-800",
+  Gauge: "bg-[#d9f3e4] text-green-800",
+  "Control Valve": "bg-[#eadcf8] text-purple-800",
+  "On-Off Valve": "bg-[#ffe4cc] text-orange-800",
+  Switch: "bg-[#f9d3d3] text-red-800",
+  PCV: "bg-[#fff2b8] text-yellow-800",
 } as const;
 
 const getBadgeColor = (formType: string) =>
   BADGE_COLORS[formType as keyof typeof BADGE_COLORS] ||
-  "bg-gray-100 text-gray-800";
+  "bg-[#eef2f7] text-gray-800";
 
 interface Props {
   instruments: Instrument[];
@@ -48,7 +48,7 @@ export default function UserInstrumentTable({
       <div
         className={`grid ${
           showAll ? "grid-cols-10" : "grid-cols-5"
-        } font-semibold bg-gray-50 py-2 `}
+        } font-semibold bg-[#f4f7fb] py-2 `}
       >
         <div>Select</div>
         <div>Tag</div>
@@ -97,7 +97,7 @@ export default function UserInstrumentTable({
                   <Checkbox
                     className={
                       selected.includes(inst._id)
-                        ? "border-blue-600 bg-blue-50" // customize/your-checkbox-classes
+                        ? "border-blue-600 bg-[#e8f1ff]" // customize/your-checkbox-classes
                         : ""
                     }
                     checked={selected.includes(inst._id)}

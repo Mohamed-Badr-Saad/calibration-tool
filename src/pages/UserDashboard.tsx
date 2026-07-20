@@ -171,7 +171,7 @@ export default function UserDashboard() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="border-2 border-blue-200 bg-blue-50/50 p-8 rounded-2xl mb-4">
+          <div className="border-2 border-blue-200 bg-[#e8f1ff]/60 p-8 rounded-2xl mb-4">
             <div className="flex justify-between mb-8 gap-3">
               <div className="text-lg font-semibold text-blue-700  flex gap-1.5">
                 <div>
@@ -221,16 +221,16 @@ export default function UserDashboard() {
                   }))
                 }
               >
-                <SelectTrigger className=" bg-blue-800 shadow-stone-500">
+                <SelectTrigger className=" bg-[#173b6c] shadow-stone-500">
                   <SelectValue placeholder="All Types" />
                 </SelectTrigger>
-                <SelectContent style={{ background: "rgb(239 246 255)" }}>
+                <SelectContent style={{ background: "#e8f1ff" }}>
                   <SelectItem value="all">All Types</SelectItem>
                   {typeOptions.map((type) => (
                     <SelectItem
                       value={type}
                       key={type}
-                      className="border-b border-gray-300 hover:bg-gray-300"
+                      className="border-b border-gray-300 hover:bg-[#dbe3ee]"
                     >
                       {type}
                     </SelectItem>
@@ -296,7 +296,7 @@ export default function UserDashboard() {
                       Tag: {appliedFilters.tag}
                       <button
                         onClick={() => handleRemoveFilter("tag")}
-                        className="h-3 w-3 rounded-full hover:bg-red-100 flex items-center justify-center"
+                        className="h-3 w-3 rounded-full hover:bg-[#f9d3d3] flex items-center justify-center"
                       >
                         <X className="h-2 w-2 text-red-600" />
                       </button>
@@ -310,7 +310,7 @@ export default function UserDashboard() {
                       Equipment: {appliedFilters.upperEquipment}
                       <button
                         onClick={() => handleRemoveFilter("upperEquipment")}
-                        className="h-3 w-3 rounded-full hover:bg-red-100 flex items-center justify-center"
+                        className="h-3 w-3 rounded-full hover:bg-[#f9d3d3] flex items-center justify-center"
                       >
                         <X className="h-2 w-2 text-red-600" />
                       </button>
@@ -324,7 +324,7 @@ export default function UserDashboard() {
                       Type: {appliedFilters.instrumentType}
                       <button
                         onClick={() => handleRemoveFilter("instrumentType")}
-                        className="h-3 w-3 rounded-full hover:bg-red-100 flex items-center justify-center"
+                        className="h-3 w-3 rounded-full hover:bg-[#f9d3d3] flex items-center justify-center"
                       >
                         <X className="h-2 w-2 text-red-600" />
                       </button>
@@ -338,21 +338,21 @@ export default function UserDashboard() {
                 <Button
                   variant="outline"
                   onClick={selectAllFiltered}
-                  style={{ backgroundColor: "rgb(34 197 94)" }}
+                  style={{ backgroundColor: "#d9f3e4" }}
                 >
                   Select All
                 </Button>
                 <Button
                   variant="outline"
                   onClick={deselectAll}
-                  style={{ backgroundColor: " rgb(254 240 138)" }}
+                  style={{ backgroundColor: "#fff2b8" }}
                 >
                   Deselect All
                 </Button>
                 <Button
                   variant="outline"
                   onClick={clearSelection}
-                  style={{ backgroundColor: " rgb(248 113 113)" }}
+                  style={{ backgroundColor: "#f9d3d3" }}
                 >
                   Clear All
                 </Button>
@@ -363,7 +363,7 @@ export default function UserDashboard() {
                   disabled={selected.length === 0}
                   onClick={proceedToCalibration}
                   variant="outline"
-                  style={{ backgroundColor: " rgb(22 135 52)" }}
+                  style={{ backgroundColor: "#16804a" }}
                 >
                   Proceed to Calibration ({selected.length})
                 </Button>

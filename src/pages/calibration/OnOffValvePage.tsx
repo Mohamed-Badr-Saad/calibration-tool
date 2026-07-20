@@ -101,7 +101,7 @@ export default function OnOffValvePage({
                 onChange={(e) => handleFieldChange("size", e.target.value)}
                 className="rounded-r-none"
               />
-              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+              <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-[#f4f7fb] text-gray-500 text-sm">
                 Inch
               </span>
             </div>
@@ -157,7 +157,7 @@ export default function OnOffValvePage({
           <div className="font-semibold mb-2">Test Results</div>
           <table className="w-full table-fixed border border-gray-300">
             <thead>
-              <tr className="bg-gray-100">
+              <tr className="bg-[#eef2f7]">
                 <th className="border border-gray-300 p-2 w-32 font-semibold">
                   Order
                 </th>
@@ -174,7 +174,7 @@ export default function OnOffValvePage({
             </thead>
             <tbody>
               <tr>
-                <td className="border border-gray-300 p-2 font-semibold bg-gray-50">
+                <td className="border border-gray-300 p-2 font-semibold bg-[#f4f7fb]">
                   Feedback Value
                 </td>
                 <td className="border border-gray-300 p-1">
@@ -218,7 +218,7 @@ export default function OnOffValvePage({
                 <td className="border border-gray-300 p-2 text-center">%</td>
               </tr>
               <tr>
-                <td className="border border-gray-300 p-2 font-semibold bg-gray-50">
+                <td className="border border-gray-300 p-2 font-semibold bg-[#f4f7fb]">
                   Time
                 </td>
                 <td className="border border-gray-300 p-1">

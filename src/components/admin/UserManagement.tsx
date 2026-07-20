@@ -219,7 +219,7 @@ export default function UserManagement() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-purple-100 rounded-lg">
+              <div className="p-2 bg-[#eadcf8] rounded-lg">
                 <Users className="h-6 w-6 text-purple-600" />
               </div>
               <div>
@@ -295,7 +295,7 @@ export default function UserManagement() {
                     Add User
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-md bg-amber-50">
+                <DialogContent className="sm:max-w-md bg-[#f8f3e7]">
                   <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                       <Users className="h-5 w-5 text-purple-600" />
@@ -325,15 +325,15 @@ export default function UserManagement() {
                       >
                         <SelectTrigger
                           style={{
-                            backgroundColor: "#fffbe8",
+                            backgroundColor: "#f8f3e7",
                             border: "1px solid blue",
                             boxShadow: "0 1px 3px rgba(0,0,2,1)",
                           }}
-                          className="!bg-[#fffbe8] !border-[#d1d5db] !text-gray-900"
+                          className="!bg-[#f8f3e7] !border-[#d1d5db] !text-gray-900"
                         >
                           <SelectValue placeholder="Select job title" />
                         </SelectTrigger>
-                        <SelectContent style={{ backgroundColor: "#fffbe8" }}>
+                        <SelectContent style={{ backgroundColor: "#f8f3e7" }}>
                           <SelectItem value="engineer">Engineer</SelectItem>
                           <SelectItem value="technician">Technician</SelectItem>
                         </SelectContent>
@@ -377,15 +377,15 @@ export default function UserManagement() {
                       >
                         <SelectTrigger
                           style={{
-                            backgroundColor: "#fffbe8",
+                            backgroundColor: "#f8f3e7",
                             border: "1px solid blue",
                             boxShadow: "0 1px 3px rgba(0,0,2,1)",
                           }}
-                          className="!bg-[#fffbe8] !border-[#d1d5db] !text-gray-900"
+                          className="!bg-[#f8f3e7] !border-[#d1d5db] !text-gray-900"
                         >
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent style={{ backgroundColor: "#fffbe8" }}>
+                        <SelectContent style={{ backgroundColor: "#f8f3e7" }}>
                           <SelectItem value="user">
                             <span className="flex items-center gap-2">
                               👤 User{" "}
@@ -431,7 +431,7 @@ export default function UserManagement() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b">
+                <thead className="bg-[#f4f7fb] border-b">
                   <tr>
                     <th className="text-left p-4 font-medium text-gray-700">
                       User
@@ -460,11 +460,11 @@ export default function UserManagement() {
                   {filtered.map((user) => (
                     <tr
                       key={user._id}
-                      className="hover:bg-gray-50 transition-colors"
+                      className="hover:bg-[#f4f7fb] transition-colors"
                     >
                       <td className="p-4">
                         <div className="flex items-center space-x-3">
-                          <div className="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                          <div className="flex-shrink-0 w-10 h-10 bg-[#eadcf8] rounded-full flex items-center justify-center">
                             <span className="text-purple-600 font-medium text-sm">
                               {user.name.charAt(0).toUpperCase()}
                             </span>
@@ -473,7 +473,7 @@ export default function UserManagement() {
                             <div className="font-medium text-gray-900 flex items-center gap-2">
                               {user.name}
                               {user.email === "Mohamed.Ali@RASHPETCO.com" && (
-                                <Badge className="text-xs bg-yellow-100 text-yellow-800">
+                                <Badge className="text-xs bg-[#fff2b8] text-yellow-800">
                                   SUPER ADMIN
                                 </Badge>
                               )}
@@ -489,8 +489,8 @@ export default function UserManagement() {
                           variant="secondary"
                           className={
                             user.jobTitle === "engineer"
-                              ? "bg-orange-100 text-orange-800"
-                              : "bg-pink-100 text-pink-800"
+                              ? "bg-[#ffe4cc] text-orange-800"
+                              : "bg-[#f8d7e7] text-pink-800"
                           }
                         >
                           {user.jobTitle === "engineer" ? (
@@ -507,8 +507,8 @@ export default function UserManagement() {
                           variant="secondary"
                           className={
                             user.role === "admin"
-                              ? "bg-red-100 text-red-800"
-                              : "bg-blue-100 text-blue-800"
+                              ? "bg-[#f9d3d3] text-red-800"
+                              : "bg-[#d8e8ff] text-blue-800"
                           }
                         >
                           {user.role === "admin" ? "🔰 Admin" : "👤 User"}
@@ -519,8 +519,8 @@ export default function UserManagement() {
                           variant="secondary"
                           className={
                             user.isActive
-                              ? "bg-green-100 text-green-800"
-                              : "bg-gray-100 text-gray-800"
+                              ? "bg-[#d9f3e4] text-green-800"
+                              : "bg-[#eef2f7] text-gray-800"
                           }
                         >
                           {user.isActive ? "✅ Active" : "❌ Inactive"}
