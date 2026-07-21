@@ -77,7 +77,7 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-[#f4f7fb] flex items-center justify-center p-4">
+    <div className="min-h-screen w-screen bg-[linear-gradient(135deg,#f8fbff_0%,#eef5ff_48%,#f4f7fb_100%)] flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6">
         {/* Company Header */}
         <div className="text-center space-y-2">
@@ -87,27 +87,31 @@ export default function AuthPage() {
                 <img
                   src={"/Rashid-icon.ico"}
                   alt="Rashid Logo"
-                  className="w-[100px]"
+                  className="w-[100px] drop-shadow-sm"
                 />
               </div>
-            <h1 className="text-2xl font-bold text-gray-900">RASHPETCO</h1>
+            <h1 className="text-2xl font-bold text-[#172033]">RASHPETCO</h1>
           </div>
-          <p className="text-gray-600">Instrument Management System</p>
+          <p className="text-[#5d6b82]">Instrument Management System</p>
         </div>
 
-        <Card className="w-full">
+        <Card className="w-full border-[#cfd9e8] bg-white/95 shadow-[0_22px_55px_rgba(23,32,51,0.14)] backdrop-blur">
           <CardHeader className="space-y-1">
             <div className="flex items-center justify-center mb-4">
               {isLogin ? (
-                <Shield className="h-12 w-12 text-blue-600" />
+                <div className="rounded-full bg-[#e8f1ff] p-3">
+                  <Shield className="h-10 w-10 text-[#2463a6]" />
+                </div>
               ) : (
-                <User className="h-12 w-12 text-green-600" />
+                <div className="rounded-full bg-[#d9f3e4] p-3">
+                  <User className="h-10 w-10 text-[#16804a]" />
+                </div>
               )}
             </div>
-            <CardTitle className="text-2xl text-center">
+            <CardTitle className="text-2xl text-center text-[#172033]">
               {isLogin ? "Welcome Back" : "Create Account"}
             </CardTitle>
-            <p className="text-center text-gray-600">
+            <p className="text-center text-[#5d6b82]">
               {isLogin
                 ? "Sign in to your account to continue"
                 : "Join RASHPETCO's instrument management platform\n (you should call the admin to activate your account) "}
@@ -144,7 +148,7 @@ export default function AuthPage() {
                       required={!isLogin}
                       value={formData.jobTitle}
                       onChange={handleInputChange}
-                      className="w-full border px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300"
+                      className="w-full rounded-md border border-[#cfd9e8] bg-white px-3 py-2 text-sm text-[#172033] shadow-xs focus:border-[#2463a6] focus:outline-none focus:ring-3 focus:ring-[#2463a6]/20"
                     >
                       <option value="" disabled>
                         Select your job title
@@ -201,8 +205,8 @@ export default function AuthPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 h-4 w-4 text-gray-400 hover:text-gray-600"
-                    style={{ backgroundColor: "#e8f1ff" }}
+                    className="absolute right-3 top-3 h-4 w-4 text-[#7a8799] hover:text-[#173b6c]"
+                    style={{ backgroundColor: "transparent" }}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -230,7 +234,7 @@ export default function AuthPage() {
 
             {/* Toggle Mode */}
             <div className="mt-6 text-center text-sm">
-              <span className="text-gray-600">
+              <span className="text-[#5d6b82]">
                 {isLogin
                   ? "Don't have an account? "
                   : "Already have an account? "}
@@ -238,8 +242,8 @@ export default function AuthPage() {
               <button
                 type="button"
                 onClick={toggleMode}
-                className="font-medium text-blue-600 hover:text-blue-500"
-                style={{ backgroundColor: "#e8f1ff" }}
+                className="font-medium text-[#2463a6] hover:text-[#1f4f86]"
+                style={{ backgroundColor: "transparent" }}
                 disabled={isLoading}
               >
                 {isLogin ? "Sign up" : "Sign in"}

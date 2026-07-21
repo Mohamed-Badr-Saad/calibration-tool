@@ -17,8 +17,8 @@ export default function UserLayout() {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-[#f4f7fb]">
-      <header className="bg-white shadow-sm border-b">
+    <div className="min-h-screen w-screen bg-[#f4f7fb] text-[#172033]">
+      <header className="bg-white/95 shadow-sm border-b border-[#dbe3ee] backdrop-blur">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Logo and title */}
           <div className="flex items-center gap-3">
@@ -26,22 +26,22 @@ export default function UserLayout() {
             <div>
               <img src={"/Rashid-icon.ico"} alt="Rashid Logo" className="w-[50px]" />
             </div>
-            <span className="text-lg font-bold text-gray-900">RASHPETCO</span>
-            <span className="text-xs rounded bg-[#d8e8ff] text-blue-700 px-2 ml-2">
+            <span className="text-lg font-bold text-[#172033]">RASHPETCO</span>
+            <span className="text-xs rounded border border-[#b7cbea] bg-[#e8f1ff] text-[#173b6c] px-2 ml-2">
               User Portal
             </span>
           </div>
           <div className="flex items-center gap-3">
             {/* User details */}
             <div className="text-right">
-              <p className="text-xs font-medium text-gray-900">{user?.name}</p>
-              <p className="text-xs text-gray-500">{user?.email}</p>
+              <p className="text-xs font-medium text-[#172033]">{user?.name}</p>
+              <p className="text-xs text-[#5d6b82]">{user?.email}</p>
             </div>
-            <Badge variant="secondary" className="bg-[#d8e8ff] text-blue-800">
+            <Badge variant="secondary" className="bg-[#e8f1ff] text-[#173b6c]">
               <User className="h-4 w-4 inline -mt-1 mr-1" />
               {user?.role}
             </Badge>
-            <Button variant="ghost" size="sm" onClick={handleLogout}>
+            <Button variant="ghost" size="sm" onClick={handleLogout} className="text-[#5d6b82] hover:text-[#b42318] hover:bg-[#fff0f0]">
               <LogOut className="h-4 w-4 mr-2" /> Logout
             </Button>
           </div>
